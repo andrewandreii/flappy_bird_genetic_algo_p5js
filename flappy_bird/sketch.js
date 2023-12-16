@@ -14,10 +14,9 @@ var isOver = false;
 var touched = false;
 var prevTouched = touched;
 
-
 function preload() {
-  pipeBodySprite = loadImage('graphics/pipe_marshmallow_fix.png');
-  pipePeakSprite = loadImage('graphics/pipe_marshmallow_fix.png');
+  pipeBodySprite = loadImage('graphics/gate.png');
+  pipePeakSprite = loadImage('graphics/gate.png');
   birdSprite = loadImage('graphics/train.png');
   bgImg = loadImage('graphics/background.png');
 }
