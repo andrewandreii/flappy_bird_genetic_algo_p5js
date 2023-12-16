@@ -1,6 +1,3 @@
-import "bird";
-import "pipes";
-
 var bird;
 var pipes;
 var parallax = 0.8;
@@ -19,9 +16,9 @@ var prevTouched = touched;
 
 
 function preload() {
-  // pipeBodySprite = loadImage('graphics/pipe_marshmallow_fix.png');
-  // pipePeakSprite = loadImage('graphics/pipe_marshmallow_fix.png');
-  // birdSprite = loadImage('graphics/train.png');
+  pipeBodySprite = loadImage('graphics/pipe_marshmallow_fix.png');
+  pipePeakSprite = loadImage('graphics/pipe_marshmallow_fix.png');
+  birdSprite = loadImage('graphics/train.png');
   bgImg = loadImage('graphics/background.png');
 }
 
@@ -59,57 +56,58 @@ function draw() {
     }
   }
 
-  // bird.update();
-  // bird.show();
+  bird.update();
+  bird.show();
 
-  // if ((frameCount - gameoverFrame) % 150 == 0) {
-  //   pipes.push(new Pipe());
-  // }
+  if ((frameCount - gameoverFrame) % 150 == 0) {
+    pipes.push(new Pipe());
+  }
 
-  // showScores();
-  // touched = (touches.length > 0);
+  showScores();
+  touched = (touches.length > 0);
 
-  // if (touched && !prevTouched) {
-  //   bird.up();
-  // }
+  if (touched && !prevTouched) {
+    bird.up();
+  }
 
-  // prevTouched = touched;
+  prevTouched = touched;
 }
 
 function showScores() {
-  // textSize(32);
-  // text('score: ' + score, 1, 32);
-  // text('record: ' + maxScore, 1, 64);
+  textSize(32);
+  text('score: ' + score, 1, 32);
+  text('record: ' + maxScore, 1, 64);
 }
 
 function gameover() {
-  // textSize(64);
-  // textAlign(CENTER, CENTER);
-  // text('GAMEOVER', width / 2, height / 2);
-  // textAlign(LEFT, BASELINE);
-  // maxScore = max(score, maxScore);
-  // isOver = true;
-  // noLoop();
+  textSize(64);
+  textAlign(CENTER, CENTER);
+  text('GAMEOVER', width / 2, height / 2);
+  textAlign(LEFT, BASELINE);
+  maxScore = max(score, maxScore);
+  isOver = true;
+  noLoop();
 }
 
 function reset() {
-  // isOver = false;
-  // score = 0;
-  // bgX = 0;
+  isOver = false;
+  score = 0;
+  bgX = 0;
   pipes = [];
   bird = new Bird();
+  bird.icon = birdSprite;
   pipes.push(new Pipe());
-  // gameoverFrame = frameCount - 1;
-  // loop();
+  gameoverFrame = frameCount - 1;
+  loop();
 }
 
 function keyPressed() {
-  // if (key === ' ') {
-  //   bird.up();
-  //   if (isOver) reset(); 
-  // }
+  if (key === ' ') {
+    bird.up();
+    if (isOver) reset(); 
+  }
 }
 
 function touchStarted() {
-  // if (isOver) reset();
+  if (isOver) reset();
 }

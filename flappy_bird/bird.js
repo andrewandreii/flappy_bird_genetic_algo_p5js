@@ -1,5 +1,7 @@
 class Bird {
-    costructor(){
+    win_height = windowHeight
+
+    constructor(){
         this.width = 64;
         this.height = 64;
 
@@ -23,8 +25,8 @@ class Bird {
         this.velocity += this.gravity;
         this.y += this.velocity;
 
-        if (this.y >= height - this.height / 2) {
-            this.y = height - this.height / 2;
+        if (this.y >= this.win_height - this.height / 2) {
+            this.y = this.win_height - this.height / 2;
             this.velocity = 0;
           }
       
