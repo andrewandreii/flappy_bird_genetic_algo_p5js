@@ -1,4 +1,4 @@
-var populationSize = 500;
+var populationSize;
 var birds;
 var savedBirds;
 var pipes;
@@ -32,19 +32,20 @@ function preload() {
   pipeBodySprite = loadImage('graphics/gate.png');
   pipePeakSprite = loadImage('graphics/gate.png');
   Bird.default_sprite = loadImage('graphics/train.png');
-
-  birds = [];
-  for (let i = 0; i < populationSize; ++ i) {
-    birds[i] = new Bird();
-  }
-
   Pipe.spacing = maxGap;
-
   bgImg = loadImage('graphics/background.png');
 }
 
 function setup() {
   createCanvas(800, 600);
+
+  populationSize = createSlider(30, 700, 200, 5);
+
+  birds = [];
+  for (let i = 0; i < populationSize.value(); ++ i) {
+    birds[i] = new Bird();
+  }
+
   reset(false);
 }
 
@@ -105,11 +106,16 @@ function draw() {
 function showScores() {
   textSize(TEXT_SIZE);
   stroke(0);
+
+  let textPos = TEXT_PADDING + TEXT_SIZE;
+
   fill(bestScoreColor);
-  text('Best score: ' + bestScore, TEXT_PADDING, TEXT_SIZE + TEXT_PADDING);
+  text('Best score: ' + bestScore, TEXT_PADDING, textPos);
   fill(255);
-  text('Terrain difficulty: ' + (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%', TEXT_PADDING, (TEXT_SIZE + TEXT_PADDING) * 2);
-  text('Hardest terrain reached: ' + (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%', TEXT_PADDING, (TEXT_SIZE + TEXT_PADDING) * 3);
+  text('Terrain difficulty: ' + (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%', TEXT_PADDING, textPos * 2);
+  text('Hardest terrain reached: ' + (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%', TEXT_PADDING, textPos * 3);
+  text('Best had ' + bestNumOfKids + (bestNumOfKids != 1 ? ' children' : ' child'), TEXT_PADDING, textPos * 4);
+  text('Population size: ' + populationSize.value(), TEXT_PADDING, textPos * 5);
   text('Generation #' + ngen, TEXT_PADDING, height - TEXT_SIZE - TEXT_PADDING);
 }
 
