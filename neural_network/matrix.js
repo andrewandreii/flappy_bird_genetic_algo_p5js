@@ -67,7 +67,7 @@ class Matrix {
     static multiply(a, b) {
       // Matrix product
       if (a.cols !== b.rows) {
-        console.log('Columns of A must match rows of B.');
+        console.log('Columns of A must match rows of B. (' + a.cols + ' != ' + b.rows + ')');
         return;
       }
   
@@ -85,7 +85,7 @@ class Matrix {
     multiply(n) {
       if (n instanceof Matrix) {
         if (this.rows !== n.rows || this.cols !== n.cols) {
-          console.log('Columns and Rows of A must match Columns and Rows of B.');
+          console.log('Columns and Rows of A must match Columns and Rows of B. ((' + this.rows + '; ' + this.cols + ') (' + n.rows + '; ' + n.cols + '))');
           return;
         }
   
@@ -114,6 +114,18 @@ class Matrix {
         .map((e, i, j) => func(matrix.data[i][j], i, j));
     }
   
+    sum(func) {
+      let s = 0;
+
+      for (let i = 0; i < this.rows; ++ i) {
+        for (let j = 0; j < this.cols; ++ j) {
+          s += this.data[i][j];
+        }
+      }
+
+      return s;
+    }
+
     print() {
       console.table(this.data);
       return this;
