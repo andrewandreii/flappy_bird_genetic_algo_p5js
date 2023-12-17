@@ -3,6 +3,8 @@ var mutationAmount = 0.1;
 var bestScore = 0;
 var bestScoreColor = [255, 255, 255];
 
+var ngen = 1;
+
 function mutateFunc(x) {
     return x + random(-mutationAmount, mutationAmount);
 }
@@ -12,7 +14,7 @@ function mutateBy(x, amount) {
 }
 
 function nextGeneration() {
-    print("next gen");
+    ++ ngen;
 
     calculateFitness();
 

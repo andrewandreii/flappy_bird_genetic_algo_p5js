@@ -2,7 +2,7 @@ class Bird {
     default_sprite = null;
 
     in_nodes = 4;
-    hid_nodes = 4;
+    hid_nodes = 6;
     out_nodes = 1;
 
     constructor(decision, color, sprite){

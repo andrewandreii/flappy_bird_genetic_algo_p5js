@@ -21,6 +21,9 @@ const minGap = 150;
 var gapThightteningRate = 0.01;
 var minGapReached = maxGap;
 
+const TEXT_SIZE = 20;
+const TEXT_PADDING = 5;
+
 function terrainDifficulty(gapSize) {
   return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
@@ -100,12 +103,14 @@ function draw() {
 }
 
 function showScores() {
-  textSize(32);
+  textSize(TEXT_SIZE);
+  stroke(0);
   fill(bestScoreColor);
-  text('best score: ' + bestScore, 1, 32);
+  text('Best score: ' + bestScore, TEXT_PADDING, TEXT_SIZE + TEXT_PADDING);
   fill(255);
-  text('terrain difficulty: ' + (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%', 1, 64);
-  text('hardest terrain reached: ' + (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%', 1, 96);
+  text('Terrain difficulty: ' + (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%', TEXT_PADDING, (TEXT_SIZE + TEXT_PADDING) * 2);
+  text('Hardest terrain reached: ' + (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%', TEXT_PADDING, (TEXT_SIZE + TEXT_PADDING) * 3);
+  text('Generation #' + ngen, TEXT_PADDING, height - TEXT_SIZE - TEXT_PADDING);
 }
 
 function reset(nextGen) {
