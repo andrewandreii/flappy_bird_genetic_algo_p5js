@@ -1,8 +1,7 @@
 class Bird {
-    win_height = windowHeight
 
     constructor(){
-        this.width = 64;
+        this.width = height/2;
         this.height = 64;
 
         this.gravity = 0.6;
@@ -11,6 +10,8 @@ class Bird {
 
         this.y = 64;
         this.x = 64;
+
+        this.decision = new NeuralNetwork(4,4,1);
     }
 
     show(){
@@ -19,6 +20,30 @@ class Bird {
 
     up(){
         this.velocity = this.lift;
+    }
+
+    make_decision(pipes){
+        
+        let closest_pipe = null;
+        let closest_distance = Infinity;
+        for(let i = 1; i < pipes.lenght; i++){
+                let distance = pipes[i].x - this.x;
+                if(distance < closest_distance && distance > 0){
+                    closest_pipe = pipes[i];
+                    closest_distance = distance;
+                }
+        }
+
+        let inputs =[];
+        inputs[0] = this.y / height;
+        inputs[1] = pipes[0].top / height;
+        inputs[2] = pipes[0].bottom / height;
+        inputs[3] = pipes[0].x / width;
+
+        let output = this.decision.predict(inputs);
+        if(output> 0.5){
+            this.up();
+        }
     }
 
     update(){

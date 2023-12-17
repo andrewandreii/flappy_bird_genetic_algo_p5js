@@ -55,6 +55,7 @@ function draw() {
     }
   }
 
+  bird.make_decision(pipes);
   bird.update();
   bird.show();
 
@@ -98,13 +99,6 @@ function reset() {
   pipes.push(new Pipe());
   gameoverFrame = frameCount - 1;
   loop();
-}
-
-function keyPressed() {
-  if (key === ' ') {
-    bird.up();
-    if (isOver) reset(); 
-  }
 }
 
 function touchStarted() {

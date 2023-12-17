@@ -63,6 +63,7 @@ class ActivationFunction {
       // Generating the Hidden Outputs
       let inputs = Matrix.fromArray(input_array);
       let hidden = Matrix.multiply(this.weights_ih, inputs);
+      print(inputs);
       hidden.add(this.bias_h);
       // activation function!
       hidden.map(this.activation_function.func);
