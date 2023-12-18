@@ -1,17 +1,16 @@
 class Pipe {
     spacing = 140;
 
+    pipeMargin = 40;
+
     constructor() {
       this.spacing = Pipe.spacing;
-      this.top = random(height / 6, 3 / 4 * height);
+      this.top = random(this.pipeMargin, height - Pipe.spacing - this.pipeMargin);
       this.bottom = this.top + this.spacing;
   
       this.x = width;
       this.w = 80;
       this.speed = 3;
-  
-      this.passed = false;
-      this.highlight = false;
     }
   
     hits(bird) {
@@ -19,23 +18,12 @@ class Pipe {
       let halfBirdwidth = bird.width / 2;
       if (bird.y - halfBirdHeight < this.top || bird.y + halfBirdHeight > this.bottom) {
         if (bird.x + halfBirdwidth > this.x && bird.x - halfBirdwidth < this.x + this.w) {
-          this.highlight = true;
-          this.passed = true;
           return true;
         }
       }
-      this.highlight = false;
       return false;
     }
-  
-    pass(bird) {
-      if (bird.x > this.x && !this.passed) {
-        this.passed = true;
-        return true;
-      }
-      return false;
-    }
-  
+
     drawHalf() {
       let howManyNedeed = 0;
       let peakRatio = pipePeakSprite.height / pipePeakSprite.width;
@@ -63,6 +51,6 @@ class Pipe {
     }
   
     offscreen() {
-      return (this.x < -this.w);
+      return this.x < -this.w;
     }
   }
