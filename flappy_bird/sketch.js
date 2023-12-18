@@ -21,6 +21,8 @@ const minGap = 150;
 var gapThightteningRate = 0.01;
 var minGapReached = maxGap;
 
+var saveBestButton;
+
 const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
 
@@ -45,6 +47,18 @@ function setup() {
   for (let i = 0; i < populationSize.value(); ++ i) {
     birds[i] = new Bird();
   }
+
+  saveBestButton = createButton('Save the best birds history');
+  saveBestButton.mousePressed(
+    function (e) {
+      if (window.isSecureContext) {
+        Navigator.clipboard.writeText(JSON.stringify(bestEachGen));
+      } else {
+        alert('must use https for this feature, text printed to console');
+        print(JSON.stringify(bestEachGen.map(function (x) { return x.decision; } )));
+      }
+    }
+  );
 
   reset(false);
 }
