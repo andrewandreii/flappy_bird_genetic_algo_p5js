@@ -30,8 +30,8 @@ function nextGeneration() {
             ++ bestNumOfKids;
         }
 
-        let child = new Bird(parent.decision, parent.color.map(mutateFunc));
-        child.decision.mutate(mutateFunc);
+        let child = new Bird(parent.brain, parent.color.map(mutateFunc));
+        child.brain.mutate(mutateFunc);
 
         birds.push(child);
     }

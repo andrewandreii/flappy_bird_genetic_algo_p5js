@@ -5,7 +5,7 @@ class Bird {
     hid_nodes = 6;
     out_nodes = 1;
 
-    constructor(decision, color, sprite){
+    constructor(brain, color, sprite) {
         this.width = 64;
         this.height = 64;
 
@@ -24,10 +24,10 @@ class Bird {
             this.sprite = Bird.default_sprite;
         }
 
-        if (decision) {
-            this.decision = decision.copy();
+        if (brain) {
+            this.brain = brain.copy();
         } else {
-            this.decision = new NeuralNetwork(this.in_nodes, this.hid_nodes, this.out_nodes);
+            this.brain = new NeuralNetwork(this.in_nodes, this.hid_nodes, this.out_nodes);
         }
 
         if (color) {
@@ -36,37 +36,24 @@ class Bird {
             this.color = [random(255), random(255), random(255)];
         }
 
-        // calculate bird's color
-        // let weights_ih_sum = this.decision.weights_ih.sum() / (this.in_nodes * this.hid_nodes);
-        // let weights_ho_sum = this.decision.weights_ho.sum() / (this.hid_nodes * this.out_nodes);
-        // let bias_h_sum = this.decision.bias_h.sum() / this.hid_nodes;
-        // let bias_o_sum = this.decision.bias_o.sum() / this.out_nodes;
-
-        // this.color = [weights_ho_sum * weights_ih_sum, bias_h_sum * bias_o_sum];
-        // this.color[2] = this.color[0] * this.color[1];
-        // this.color = this.color.map(
-        //     function (x) {
-        //         return (x + 1) / 2 * 255;
-        //     }
-        // );
+        // TODO: implement color based on genetic code
     }
 
-    show(){
+    show() {
         noStroke();
         fill(this.color);
-        ellipse(this.x, this.y - this.height / 2 - 10, 20);
+        ellipse(this.x, this.y, max(this.width, this.height) + 5);
         image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }
 
-    up(){
+    up() {
         this.velocity = this.lift;
     }
 
-    make_decision(pipes){
-        
+    make_decision(pipes) {
         let closest_pipe = null;
         let closest_distance = Infinity;
-        for(let i = 1; i < pipes.lenght; i++){
+        for(let i = 0; i < pipes.length; ++ i) {
                 let distance = pipes[i].x - this.x;
                 if(distance < closest_distance && distance > 0){
                     closest_pipe = pipes[i];
@@ -76,17 +63,17 @@ class Bird {
 
         let inputs = [];
         inputs[0] = this.y / height;
-        inputs[1] = pipes[0].top / height;
-        inputs[2] = pipes[0].bottom / height;
-        inputs[3] = pipes[0].x / width;
+        inputs[1] = closest_pipe.top / height;
+        inputs[2] = closest_pipe.bottom / height;
+        inputs[3] = closest_pipe.x / width;
 
-        let output = this.decision.predict(inputs);
-        if(output> 0.5){
+        let output = this.brain.predict(inputs);
+        if(output > 0.5){
             this.up();
         }
     }
 
-    update(){
+    update() {
         ++ this.score;
 
         this.velocity += this.gravity;
