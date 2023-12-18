@@ -49,7 +49,17 @@ class Bird {
         colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color),100 - this.offsetS,100 - this.offsetB);
+
+        this.sprite.loadPixels();
+        for(let i = 0;i <= this.sprite.height; i++){
+            for(let j = 0;j <= this.sprite.width; j++){
+                if(this.sprite[i][j].color == (26,0,100))
+                    this.sprite[i][j].color = (floor(this.color),100 - this.offsetS,100 - this.offsetB);
+            }
+        }
+        this.sprite.updatePixels();
         colorMode(RGB,255);
+
         ellipse(this.x, this.y, max(this.width, this.height) + 5);
         image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }
