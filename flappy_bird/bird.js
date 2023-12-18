@@ -5,7 +5,9 @@ class Bird {
     hid_nodes = 6;
     out_nodes = 1;
 
-    constructor(brain, color, sprite) {
+    sizeColony = 0;
+
+    constructor(brain, color, sprite,offsetS,offsetB) {
         this.width = 64;
         this.height = 64;
 
@@ -32,16 +34,22 @@ class Bird {
 
         if (color) {
             this.color = color;
-        } else {
-            this.color = [random(255), random(255), random(255)];
+            print(this.color);
         }
-
+        if(offsetS){
+            this.offsetS = offsetS;
+        }
+        if(offsetB){
+            this.offsetB = offsetB;
+        }
         // TODO: implement color based on genetic code
     }
 
     show() {
+        colorMode(HSB, 360, 100, 100);
         noStroke();
-        fill(this.color);
+        fill(floor(this.color),100 - this.offsetS,100 - this.offsetB);
+        colorMode(RGB,255);
         ellipse(this.x, this.y, max(this.width, this.height) + 5);
         image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }

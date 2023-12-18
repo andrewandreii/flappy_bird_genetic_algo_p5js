@@ -1,7 +1,7 @@
 var mutationAmount = 0.1;
 
 var bestScore = 0;
-var bestScoreColor = [255, 255, 255];
+var bestScoreColor = 0;
 var bestNumOfKids = 0;
 
 var bestEachGen = [];

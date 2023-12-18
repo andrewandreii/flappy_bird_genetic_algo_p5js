@@ -5,6 +5,7 @@ var savedBirds;
 var pipes;
 
 var parallax = 0.8;
+var pipeFrequancy;
 
 var birdSprite;
 var pipeBodySprite;
@@ -38,6 +39,7 @@ function preload() {
   Bird.default_sprite = getResource('train.png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
+  pipeFrequancy = 0;
 }
 
 function setup() {
@@ -46,8 +48,26 @@ function setup() {
   populationSize = createSlider(30, 700, 200, 5);
 
   birds = [];
+  Bird.sizeColony = populationSize.value();
+  let hueCounter = 0;;
+
   for (let i = 0; i < populationSize.value(); ++ i) {
-    birds[i] = new Bird();
+    
+    let color = i*(360/populationSize.value());
+    hueCounter += color;
+
+    if(hueCounter > 5) { 
+      hueCounter = 0;
+      birds[i] = new Bird(null,color);
+    }
+    else{
+      if(hueCounter > 2.5){
+        birds[i] = new Bird(null,color,null,hueCounter)
+      }
+      else{
+        birds[i] = new Bird(null,color,null,null,hueCounter)
+      }
+    }
   }
 
   saveBestButton = createButton('Save the best birds history');
@@ -93,6 +113,7 @@ function draw() {
 
     if (pipes[i].offscreen()) {
       pipes.splice(i, 1);
+      //pipeFrequancy = random(-35, 35);
     }
   }
 
@@ -102,7 +123,8 @@ function draw() {
     bird.show();
   }
 
-  if (frameCount % 150 == 0) {
+  print(floor(pipeFrequancy));
+  if ((frameCount + floor(pipeFrequancy)) % 150 == 0) {
     if (Pipe.spacing > minGap) {
       Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
     }
@@ -111,6 +133,7 @@ function draw() {
     }
 
     pipes.push(new Pipe());
+
   }
 
   showScores();
@@ -144,6 +167,7 @@ function reset(nextGen) {
   }
 
   savedBirds = [];
+  Bird.colorD = 0;
 
   frameCount = 1;
 }
