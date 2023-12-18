@@ -1,24 +1,21 @@
+
 var populationSize;
 var birds;
 var savedBirds;
 var pipes;
+
 var parallax = 0.8;
-var score = 0;
-var maxScore = 0;
+
 var birdSprite;
 var pipeBodySprite;
 var pipePeakSprite;
 var bgImg;
-var bgX;
-var gameoverFrame = 0;
-var isOver = false;
 
-var touched = false;
-var prevTouched = touched;
+var bgX;
 
 const maxGap = 250;
-const minGap = 150;
-var gapThightteningRate = 0.01;
+const minGap = 155;
+var gapThightteningRate = 0.05;
 var minGapReached = maxGap;
 
 var saveBestButton;
@@ -30,12 +27,17 @@ function terrainDifficulty(gapSize) {
   return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
 
+const resourcesPath = "../resources/"
+function getResource(filename) {
+  return loadImage(resourcesPath + filename);
+}
+
 function preload() {
-  pipeBodySprite = loadImage('graphics/gate.png');
-  pipePeakSprite = loadImage('graphics/gate.png');
-  Bird.default_sprite = loadImage('graphics/train.png');
+  pipeBodySprite = getResource('gate.png');
+  pipePeakSprite = getResource('gate.png');
+  Bird.default_sprite = getResource('train.png');
   Pipe.spacing = maxGap;
-  bgImg = loadImage('graphics/background.png');
+  bgImg = getResource('background.png');
 }
 
 function setup() {
@@ -100,7 +102,7 @@ function draw() {
     bird.show();
   }
 
-  if ((frameCount - gameoverFrame) % 150 == 0) {
+  if (frameCount % 150 == 0) {
     if (Pipe.spacing > minGap) {
       Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
     }
@@ -112,9 +114,6 @@ function draw() {
   }
 
   showScores();
-  touched = (touches.length > 0);
-
-  prevTouched = touched;
 }
 
 function showScores() {
@@ -145,9 +144,6 @@ function reset(nextGen) {
   }
 
   savedBirds = [];
-  gameoverFrame = frameCount - 1;
-}
 
-function touchStarted() {
-  if (isOver) reset();
+  frameCount = 1;
 }
