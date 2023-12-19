@@ -1,4 +1,4 @@
-var mutationAmount = 0.1;
+var mutationAmount = 0.05;
 
 var bestScore = 0;
 var bestScoreColor = 0;

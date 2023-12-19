@@ -1,4 +1,3 @@
-
 var populationSize;
 var birds;
 var savedBirds;
@@ -20,6 +19,7 @@ var gapThightteningRate = 0.05;
 var minGapReached = maxGap;
 
 var saveBestButton;
+var isPaused = 0;
 
 const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
@@ -36,7 +36,7 @@ function getResource(filename) {
 function preload() {
   pipeBodySprite = getResource('gate.png');
   pipePeakSprite = getResource('gate.png');
-  Bird.default_sprite = getResource('train.png');
+  Bird.default_sprite = getResource('pixil-frame-0 (15).png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
   pipeFrequancy = 0;
@@ -58,14 +58,14 @@ function setup() {
 
     if(hueCounter > 5) { 
       hueCounter = 0;
-      birds[i] = new Bird(null,color);
+      birds[i] = new Bird(null,[color,100,100]);
     }
     else{
       if(hueCounter > 2.5){
-        birds[i] = new Bird(null,color,null,hueCounter)
+        birds[i] = new Bird(null,[color,100-4*hueCounter,100]);
       }
       else{
-        birds[i] = new Bird(null,color,null,null,hueCounter)
+        birds[i] = new Bird(null,[color,100,100-4*hueCounter]);
       }
     }
   }
@@ -86,57 +86,79 @@ function setup() {
 }
 
 function draw() {
-  background(0);
-  image(bgImg, bgX, 0, bgImg.width, height);
-  bgX -= pipes[0].speed * parallax;
+  if(isPaused == 0){
 
-  if (bgX <= -bgImg.width + width) {
-    image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
-    if (bgX <= -bgImg.width) {
-      bgX = 0;
-    }
-  }
+    background(0);
+    image(bgImg, bgX, 0, bgImg.width, height);
+    bgX -= pipes[0].speed * parallax;
 
-  if (birds.length == 0) {
-    reset(true);
-  }
-
-  for (var i = pipes.length - 1; i >= 0; i--) {
-    pipes[i].update();
-    pipes[i].show();
-
-    for (let j = 0; j < birds.length; ++ j) {
-      if (pipes[i].hits(birds[j])) {
-        savedBirds.push(birds.splice(j, 1)[0]);
+    if (bgX <= -bgImg.width + width) {
+      image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
+      if (bgX <= -bgImg.width) {
+        bgX = 0;
       }
     }
 
-    if (pipes[i].offscreen()) {
-      pipes.splice(i, 1);
-      //pipeFrequancy = random(-35, 35);
-    }
-  }
-
-  for (let bird of birds) {
-    bird.make_decision(pipes);
-    bird.update();
-    bird.show();
-  }
-
-  print(floor(pipeFrequancy));
-  if ((frameCount + floor(pipeFrequancy)) % 150 == 0) {
-    if (Pipe.spacing > minGap) {
-      Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
-    }
-    if (Pipe.spacing < minGapReached) {
-      minGapReached = Pipe.spacing;
+    if (birds.length == 0) {
+      reset(true);
     }
 
-    pipes.push(new Pipe());
+    for (var i = pipes.length - 1; i >= 0; i--) {
+      pipes[i].update();
+      pipes[i].show();
 
+      for (let j = 0; j < birds.length; ++ j) {
+        if (pipes[i].hits(birds[j])) {
+        savedBirds.push(birds.splice(j, 1)[0]);
+        }
+      }
+
+      if (pipes[i].offscreen()) {
+        pipes.splice(i, 1);
+      }
+    }
+
+    for (let bird of birds) {
+      bird.make_decision(pipes);
+      bird.update();
+      bird.show();
+    }
+
+    if ((frameCount /*+ floor(pipeFrequancy)*/) % 150 == 0) {
+      if (Pipe.spacing > minGap) {
+        Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
+      }
+      if (Pipe.spacing < minGapReached) {
+        minGapReached = Pipe.spacing;
+      }
+
+      pipes.push(new Pipe());
+
+      frameCount += floor(random(0, 35));
+      //pipeFrequancy = random(0, 35);
+
+    }
   }
+  else{
+    //background(0);
+    // const pauseColor = color(180,0,5);
+    // pauseColor.setAlpha(10);
+    // fill(pauseColor);
+    // rect(0, 0, 800, 600);
+  }
+    
 
   showScores();
+}
+
+function mousePressed(){
+  if(isPaused == 0){
+    isPaused = 1;
+  }
+  else{
+    noTint();
+    isPaused = 0;
+  }
 }
 
 function showScores() {
@@ -167,7 +189,6 @@ function reset(nextGen) {
   }
 
   savedBirds = [];
-  Bird.colorD = 0;
 
   frameCount = 1;
 }
