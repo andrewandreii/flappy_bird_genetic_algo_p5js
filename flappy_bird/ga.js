@@ -1,4 +1,5 @@
-var mutationAmount = 0.1;
+var mutationAmount = 0.05;
+const AVERAGE_MUTATION_AMOUNT = 0.05;
 
 var bestScore = 0;
 var bestScoreColor = [255, 255, 255];
@@ -19,7 +20,7 @@ function mutateBy(x, amount) {
 function nextGeneration() {
     ++ ngen;
 
-    calculateFitness();
+    let avg_fitness = calculateFitness() / savedBirds.length;
 
     birds = [];
     bestNumOfKids = 0;
@@ -30,8 +31,8 @@ function nextGeneration() {
             ++ bestNumOfKids;
         }
 
-        let child = new Bird(parent.brain, parent.color.map(mutateFunc));
-        child.brain.mutate(mutateFunc);
+        let child = new Bird(parent.brain, parent.color.map(function (x) { return mutateBy(x, 0.1 * 255); }));
+        child.brain.mutate(function (x) { return mutateBy(x, (avg_fitness - parent.fitness) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); });
 
         birds.push(child);
     }
@@ -50,6 +51,8 @@ function pickOne() {
 }
 
 function calculateFitness() {
+    // print(savedBirds);
+
     let sum = 0;
     let bestIdx = 0;
     for (let i = 0; i < savedBirds.length; ++ i) {
@@ -66,4 +69,8 @@ function calculateFitness() {
     for (let i = 0; i < savedBirds.length; ++ i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
     }
+
+    // print(savedBirds.map(function (x) { return x.fitness; }));
+
+    return sum;
 }

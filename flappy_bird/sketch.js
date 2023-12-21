@@ -1,4 +1,4 @@
-
+ const DEFAULT_POPULATION_SIZE = 1000;
 var populationSize;
 var birds;
 var savedBirds;
@@ -13,9 +13,9 @@ var bgImg;
 
 var bgX;
 
-const maxGap = 250;
+const maxGap = 300;
 const minGap = 155;
-var gapThightteningRate = 0.05;
+var gapThightteningRate = 0.03;
 var minGapReached = maxGap;
 
 var saveBestButton;
@@ -43,7 +43,7 @@ function preload() {
 function setup() {
   createCanvas(800, 600);
 
-  populationSize = createSlider(30, 700, 200, 5);
+  populationSize = createSlider(30, 700, DEFAULT_POPULATION_SIZE, 5);
 
   birds = [];
   for (let i = 0; i < populationSize.value(); ++ i) {
@@ -96,10 +96,15 @@ function draw() {
     }
   }
 
-  for (let bird of birds) {
-    bird.make_decision(pipes);
-    bird.update();
-    bird.show();
+  for (let i = 0; i < birds.length;) {
+    birds[i].make_decision(pipes);
+    birds[i].update();
+    birds[i].show();
+    if (birds[i].dead) {
+      savedBirds.push(birds.splice(i, 1)[0]);
+    } else {
+      ++ i;
+    }
   }
 
   if (frameCount % 150 == 0) {

@@ -18,6 +18,8 @@ class Bird {
 
         this.score = 0;
 
+        this.dead = false;
+
         if (sprite != null) {
             this.sprite = sprite;
         } else {
@@ -33,7 +35,7 @@ class Bird {
         if (color) {
             this.color = color;
         } else {
-            this.color = [random(255), random(255), random(255)];
+            this.color = [random(30, 225), random(30, 225), random(30, 225)];
         }
 
         // TODO: implement color based on genetic code
@@ -51,24 +53,14 @@ class Bird {
     }
 
     make_decision(pipes) {
-        let closest_pipe = null;
-        let closest_distance = Infinity;
-        for(let i = 0; i < pipes.length; ++ i) {
-                let distance = pipes[i].x - this.x;
-                if(distance < closest_distance && distance > 0){
-                    closest_pipe = pipes[i];
-                    closest_distance = distance;
-                }
-        }
-
         let inputs = [];
         inputs[0] = this.y / height;
-        inputs[1] = closest_pipe.top / height;
-        inputs[2] = closest_pipe.bottom / height;
-        inputs[3] = closest_pipe.x / width;
+        inputs[1] = pipes[0].top / height;
+        inputs[2] = pipes[0].bottom / height;
+        inputs[3] = pipes[0].x / width;
 
         let output = this.brain.predict(inputs);
-        if(output > 0.5){
+        if(output[0] > 0.5){
             this.up();
         }
     }
@@ -80,13 +72,15 @@ class Bird {
         this.y += this.velocity;
 
         if (this.y >= height - this.height / 2) {
-            this.y = height - this.height / 2;
-            this.velocity = 0;
+            // this.y = height - this.height / 2;
+            // this.velocity = 0;
+            this.dead = true;
           }
       
-          if (this.y <= this.height / 2) {
-            this.y = this.height / 2;
-            this.velocity = 0;
+        if (this.y <= this.height / 2) {
+            // this.y = this.height / 2;
+            // this.velocity = 0;
+            this.dead = true;
         }
     }
 }

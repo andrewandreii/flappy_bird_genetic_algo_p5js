@@ -6,6 +6,7 @@ class Pipe {
     constructor() {
       this.spacing = Pipe.spacing;
       this.top = random(this.pipeMargin, height - Pipe.spacing - this.pipeMargin);
+      // this.top = random(height / 6, height * 3/4);
       this.bottom = this.top + this.spacing;
   
       this.x = width;
