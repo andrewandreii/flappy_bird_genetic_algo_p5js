@@ -1,10 +1,11 @@
- const DEFAULT_POPULATION_SIZE = 1000;
+const DEFAULT_POPULATION_SIZE = 1000;
 var populationSize;
 var birds;
 var savedBirds;
 var pipes;
 
 var parallax = 0.8;
+var pipeFrequancy;
 
 var birdSprite;
 var pipeBodySprite;
@@ -19,6 +20,7 @@ var gapThightteningRate = 0.03;
 var minGapReached = maxGap;
 
 var saveBestButton;
+var isPaused = 0;
 
 const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
@@ -35,9 +37,10 @@ function getResource(filename) {
 function preload() {
   pipeBodySprite = getResource('gate.png');
   pipePeakSprite = getResource('gate.png');
-  Bird.default_sprite = getResource('train.png');
+  Bird.default_sprite = getResource('pixil-frame-0 (15).png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
+  pipeFrequancy = 0;
 }
 
 function setup() {
@@ -46,8 +49,26 @@ function setup() {
   populationSize = createSlider(30, 700, DEFAULT_POPULATION_SIZE, 5);
 
   birds = [];
-  for (let i = 0; i < populationSize.value(); ++ i) {
-    birds[i] = new Bird();
+  Bird.sizeColony = populationSize.value();
+  let hueCounter = 0;;
+
+  for (let i = 0; i < populationSize.value(); ++i) {
+
+    let color = i * (360 / populationSize.value());
+    hueCounter += color;
+
+    if (hueCounter > 5) {
+      hueCounter = 0;
+      birds[i] = new Bird(null, [color, 100, 100]);
+    }
+    else {
+      if (hueCounter > 2.5) {
+        birds[i] = new Bird(null, [color, 100 - 4 * hueCounter, 100]);
+      }
+      else {
+        birds[i] = new Bird(null, [color, 100, 100 - 4 * hueCounter]);
+      }
+    }
   }
 
   saveBestButton = createButton('Save the best birds history');
@@ -57,7 +78,7 @@ function setup() {
         Navigator.clipboard.writeText(JSON.stringify(bestEachGen));
       } else {
         alert('must use https for this feature, text printed to console');
-        print(JSON.stringify(bestEachGen.map(function (x) { return x.decision; } )));
+        print(JSON.stringify(bestEachGen.map(function (x) { return x.decision; })));
       }
     }
   );
@@ -66,28 +87,16 @@ function setup() {
 }
 
 function draw() {
-  background(0);
-  image(bgImg, bgX, 0, bgImg.width, height);
-  bgX -= pipes[0].speed * parallax;
+  if (isPaused == 0) {
 
-  if (bgX <= -bgImg.width + width) {
-    image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
-    if (bgX <= -bgImg.width) {
-      bgX = 0;
-    }
-  }
+    background(0);
+    image(bgImg, bgX, 0, bgImg.width, height);
+    bgX -= pipes[0].speed * parallax;
 
-  if (birds.length == 0) {
-    reset(true);
-  }
-
-  for (var i = pipes.length - 1; i >= 0; i--) {
-    pipes[i].update();
-    pipes[i].show();
-
-    for (let j = 0; j < birds.length; ++ j) {
-      if (pipes[i].hits(birds[j])) {
-        savedBirds.push(birds.splice(j, 1)[0]);
+    if (bgX <= -bgImg.width + width) {
+      image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
+      if (bgX <= -bgImg.width) {
+        bgX = 0;
       }
     }
 
@@ -103,7 +112,7 @@ function draw() {
     if (birds[i].dead) {
       savedBirds.push(birds.splice(i, 1)[0]);
     } else {
-      ++ i;
+      ++i;
     }
   }
 
@@ -113,12 +122,67 @@ function draw() {
     }
     if (Pipe.spacing < minGapReached) {
       minGapReached = Pipe.spacing;
+      if (birds.length == 0) {
+        reset(true);
+      }
+
+      for (var i = pipes.length - 1; i >= 0; i--) {
+        pipes[i].update();
+        pipes[i].show();
+
+        for (let j = 0; j < birds.length; ++j) {
+          if (pipes[i].hits(birds[j])) {
+            savedBirds.push(birds.splice(j, 1)[0]);
+          }
+        }
+
+        if (pipes[i].offscreen()) {
+          pipes.splice(i, 1);
+        }
+      }
+
+      for (let bird of birds) {
+        bird.make_decision(pipes);
+        bird.update();
+        bird.show();
+      }
+
+      if ((frameCount /*+ floor(pipeFrequancy)*/) % 150 == 0) {
+        if (Pipe.spacing > minGap) {
+          Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
+        }
+        if (Pipe.spacing < minGapReached) {
+          minGapReached = Pipe.spacing;
+        }
+
+        pipes.push(new Pipe());
+
+        frameCount += floor(random(0, 35));
+        //pipeFrequancy = random(0, 35);
+
+      }
+    }
+    else {
+      //background(0);
+      // const pauseColor = color(180,0,5);
+      // pauseColor.setAlpha(10);
+      // fill(pauseColor);
+      // rect(0, 0, 800, 600);
     }
 
-    pipes.push(new Pipe());
-  }
 
-  showScores();
+    showScores();
+  }
+}
+
+function mousePressed() {
+  if (isPaused == 0) {
+    isPaused = 1;
+  }
+  else {
+    noTint();
+    isPaused = 0;
+  }
 }
 
 function showScores() {

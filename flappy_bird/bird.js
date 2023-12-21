@@ -2,8 +2,10 @@ class Bird {
     default_sprite = null;
 
     in_nodes = 4;
-    hid_nodes = 6;
+    hid_nodes = 4;
     out_nodes = 1;
+
+    sizeColony = 0;
 
     constructor(brain, color, sprite) {
         this.width = 64;
@@ -17,6 +19,7 @@ class Bird {
         this.x = 64;
 
         this.score = 0;
+        this.color = [];
 
         this.dead = false;
 
@@ -33,17 +36,44 @@ class Bird {
         }
 
         if (color) {
+<<<<<<< HEAD
             this.color = color;
         } else {
             this.color = [random(30, 225), random(30, 225), random(30, 225)];
         }
+=======
+            this.color[0] = color[0];
+            this.color[1] = color[1];
+            this.color[2] = color[2];
+>>>>>>> bc480429357d4d5f5c36fc9a414d25b2964967e2
 
+            //colorMode(HSB, 360, 100, 100);
+            // this.sprite.loadPixels();
+            // for(let i = 0; i <= this.sprite.height; i++){
+            //     for(let j = 0; j <= this.sprite.width; j++){
+            //         if(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] == 0){
+            //             //this.sprite.pixels[i * this.sprite.width + j] = this.color;
+            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4] = 255;
+            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] = 255;
+            //         }
+            //         // else{
+            //         //     // print("hello");
+            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4]);
+            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 1]);
+            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 2]);
+            //         // }
+            //     }
+            // }
+            // this.sprite.updatePixels();
+            // colorMode(RGB,255);
+        }
         // TODO: implement color based on genetic code
     }
 
     show() {
+        colorMode(HSB, 360, 100, 100);
         noStroke();
-        fill(this.color);
+        fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
         ellipse(this.x, this.y, max(this.width, this.height) + 5);
         image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }
