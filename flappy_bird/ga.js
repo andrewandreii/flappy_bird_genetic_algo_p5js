@@ -1,8 +1,5 @@
 var mutationAmount = 0.05;
-<<<<<<< HEAD
 const AVERAGE_MUTATION_AMOUNT = 0.05;
-=======
->>>>>>> bc480429357d4d5f5c36fc9a414d25b2964967e2
 
 var bestScore = 0;
 var bestScoreColor = 0;

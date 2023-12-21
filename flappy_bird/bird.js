@@ -36,16 +36,9 @@ class Bird {
         }
 
         if (color) {
-<<<<<<< HEAD
-            this.color = color;
-        } else {
-            this.color = [random(30, 225), random(30, 225), random(30, 225)];
-        }
-=======
             this.color[0] = color[0];
             this.color[1] = color[1];
             this.color[2] = color[2];
->>>>>>> bc480429357d4d5f5c36fc9a414d25b2964967e2
 
             //colorMode(HSB, 360, 100, 100);
             // this.sprite.loadPixels();
