@@ -20,7 +20,8 @@ var gapThightteningRate = 0.03;
 var minGapReached = maxGap;
 
 var saveBestButton;
-var isPaused = 0;
+var pauseButton;
+var isPaused = false;
 
 const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
@@ -82,6 +83,9 @@ function setup() {
       }
     }
   );
+
+  pauseButton = createButton('Pause');
+  pauseButton.mousePressed(togglePause);
 
   reset(false);
 }
@@ -156,19 +160,18 @@ function draw() {
   showScores();
 }
 
-function pause() {
-  background(0, 0, 255);
-  noLoop();
-}
-
-function mousePressed() {
-  if (isPaused == 0) {
-    isPaused = 1;
+function togglePause() {
+  if (!isPaused) {
+    textAlign(CENTER, CENTER);
+    fill(0);
+    textSize(40);
+    text('Paused', width / 2, height / 2);
+    frameRate(0);
+  } else  {
+    textAlign(LEFT, BASELINE);
+    frameRate(60);
   }
-  else {
-    noTint();
-    isPaused = 0;
-  }
+  isPaused = !isPaused;
 }
 
 function showScores() {
