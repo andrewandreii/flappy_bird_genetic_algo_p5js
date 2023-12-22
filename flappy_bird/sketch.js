@@ -5,7 +5,6 @@ var savedBirds;
 var pipes;
 
 var parallax = 0.8;
-var pipeFrequancy;
 
 var birdSprite;
 var pipeBodySprite;
@@ -17,7 +16,12 @@ var bgX;
 const maxGap = 300;
 const minGap = 155;
 var gapThightteningRate = 0.03;
+const minPipePeriod = 70;
+const maxPipePeriod = 150; // every 150 frames
+var periodShorteningRate = 0.3;
+var pipePeriod = maxPipePeriod;
 var minGapReached = maxGap;
+var pipePeriodCheck = 0;
 
 var saveBestButton;
 var pauseButton;
@@ -102,11 +106,10 @@ function draw() {
     }
   }
 
+
   if (birds.length == 0) {
     reset(true);
   }
-
-
 
   for (var i = pipes.length - 1; i >= 0; i--) {
     pipes[i].update();
@@ -136,7 +139,7 @@ function draw() {
     }
   }
 
-  if (frameCount % 150 == 0) {
+  if (frameCount % pipePeriod == pipePeriodCheck) {
     if (Pipe.spacing > minGap) {
       Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
     }
@@ -144,18 +147,13 @@ function draw() {
       minGapReached = Pipe.spacing;
     }
 
+    if (pipePeriod > minPipePeriod) {
+      pipePeriod += floor((minPipePeriod - maxPipePeriod) * periodShorteningRate);
+      pipePeriodCheck = frameCount % pipePeriod;
+    }
+
     pipes.push(new Pipe());
-
-    frameCount += floor(random(0, 35));
   }
-  else {
-    //background(0);
-    // const pauseColor = color(180,0,5);
-    // pauseColor.setAlpha(10);
-    // fill(pauseColor);
-    // rect(0, 0, 800, 600);
-  }
-
 
   showScores();
 }
@@ -167,7 +165,7 @@ function togglePause() {
     textSize(40);
     text('Paused', width / 2, height / 2);
     frameRate(0);
-  } else  {
+  } else {
     textAlign(LEFT, BASELINE);
     frameRate(60);
   }
@@ -194,6 +192,11 @@ function reset(nextGen) {
   bgX = 0;
 
   Pipe.spacing = maxGap;
+  let posInPeriod = frameCount % pipePeriod;
+  // pipePeriodCheck = posInPeriod < pipePeriodCheck ? pipePeriodCheck % maxPipePeriod : (posInPeriod + pipePeriod - (posInPeriod - pipePeriodCheck)) % maxPipePeriod;
+  pipePeriod = maxPipePeriod;
+  pipePeriodCheck = 0;
+  frameCount = 0; // Dirty fix
   pipes = [];
   pipes.push(new Pipe());
 
