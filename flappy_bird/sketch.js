@@ -87,23 +87,39 @@ function setup() {
 }
 
 function draw() {
-  if (isPaused == 0) {
+  background(0);
+  image(bgImg, bgX, 0, bgImg.width, height);
+  bgX -= pipes[0].speed * parallax;
 
-    background(0);
-    image(bgImg, bgX, 0, bgImg.width, height);
-    bgX -= pipes[0].speed * parallax;
+  if (bgX <= -bgImg.width + width) {
+    image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
+    if (bgX <= -bgImg.width) {
+      bgX = 0;
+    }
+  }
 
-    if (bgX <= -bgImg.width + width) {
-      image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
-      if (bgX <= -bgImg.width) {
-        bgX = 0;
+  if (birds.length == 0) {
+    reset(true);
+  }
+
+
+
+  for (var i = pipes.length - 1; i >= 0; i--) {
+    pipes[i].update();
+    pipes[i].show();
+
+    for (let j = 0; j < birds.length; ++j) {
+      if (pipes[i].hits(birds[j])) {
+        savedBirds.push(birds.splice(j, 1)[0]);
       }
     }
 
     if (pipes[i].offscreen()) {
       pipes.splice(i, 1);
     }
+
   }
+
 
   for (let i = 0; i < birds.length;) {
     birds[i].make_decision(pipes);
@@ -122,57 +138,27 @@ function draw() {
     }
     if (Pipe.spacing < minGapReached) {
       minGapReached = Pipe.spacing;
-      if (birds.length == 0) {
-        reset(true);
-      }
-
-      for (var i = pipes.length - 1; i >= 0; i--) {
-        pipes[i].update();
-        pipes[i].show();
-
-        for (let j = 0; j < birds.length; ++j) {
-          if (pipes[i].hits(birds[j])) {
-            savedBirds.push(birds.splice(j, 1)[0]);
-          }
-        }
-
-        if (pipes[i].offscreen()) {
-          pipes.splice(i, 1);
-        }
-      }
-
-      for (let bird of birds) {
-        bird.make_decision(pipes);
-        bird.update();
-        bird.show();
-      }
-
-      if ((frameCount /*+ floor(pipeFrequancy)*/) % 150 == 0) {
-        if (Pipe.spacing > minGap) {
-          Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
-        }
-        if (Pipe.spacing < minGapReached) {
-          minGapReached = Pipe.spacing;
-        }
-
-        pipes.push(new Pipe());
-
-        frameCount += floor(random(0, 35));
-        //pipeFrequancy = random(0, 35);
-
-      }
-    }
-    else {
-      //background(0);
-      // const pauseColor = color(180,0,5);
-      // pauseColor.setAlpha(10);
-      // fill(pauseColor);
-      // rect(0, 0, 800, 600);
     }
 
+    pipes.push(new Pipe());
 
-    showScores();
+    frameCount += floor(random(0, 35));
   }
+  else {
+    //background(0);
+    // const pauseColor = color(180,0,5);
+    // pauseColor.setAlpha(10);
+    // fill(pauseColor);
+    // rect(0, 0, 800, 600);
+  }
+
+
+  showScores();
+}
+
+function pause() {
+  background(0, 0, 255);
+  noLoop();
 }
 
 function mousePressed() {
