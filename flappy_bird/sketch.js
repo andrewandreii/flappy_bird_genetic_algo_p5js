@@ -13,12 +13,12 @@ var bgImg;
 
 var bgX;
 
-const maxGap = 300;
+const maxGap = 240;
 const minGap = 155;
 var gapThightteningRate = 0.03;
 const minPipePeriod = 70;
 const maxPipePeriod = 150; // every 150 frames
-var periodShorteningRate = 0.3;
+var periodShorteningRate = 0.03;
 var pipePeriod = maxPipePeriod;
 var minGapReached = maxGap;
 var pipePeriodCheck = 0;

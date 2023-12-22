@@ -1,7 +1,7 @@
 class Pipe {
     spacing = 140;
 
-    pipeMargin = 40;
+    pipeMargin = 20;
 
     constructor() {
       this.spacing = Pipe.spacing;
