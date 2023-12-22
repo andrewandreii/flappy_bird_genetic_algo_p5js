@@ -4,6 +4,7 @@ const AVERAGE_MUTATION_AMOUNT = 0.05;
 var bestScore = 0;
 var bestScoreColor = 0;
 var bestNumOfKids = 0;
+var bestBrain;
 
 var bestEachGen = [];
 
@@ -44,6 +45,9 @@ function nextGeneration() {
 
         birds.push(child);
     }
+
+    let savedBird = new Bird(bestBrain, bestScoreColor);
+    birds.push(savedBird);
 }
 
 function meanColor(parents) {
@@ -141,6 +145,7 @@ function calculateFitness() {
     }
 
     bestEachGen.push(savedBirds[bestIdx]);
+    bestBrain = savedBirds[bestIdx].brain;
 
     for (let i = 0; i < savedBirds.length; ++ i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
