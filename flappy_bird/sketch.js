@@ -14,9 +14,9 @@ var bgImg;
 var bgX;
 
 const maxGap = 240;
-const minGap = 155;
+const minGap = 160;
 var gapThightteningRate = 0.03;
-const minPipePeriod = 70;
+const minPipePeriod = 90;
 const maxPipePeriod = 150; // every 150 frames
 var periodShorteningRate = 0.03;
 var pipePeriod = maxPipePeriod;
@@ -52,6 +52,7 @@ function setup() {
   createCanvas(800, 600);
 
   populationSize = createSlider(30, 700, DEFAULT_POPULATION_SIZE, 5);
+  populationSize.parent("controls");
 
   birds = [];
   Bird.sizeColony = populationSize.value();
@@ -87,9 +88,11 @@ function setup() {
       }
     }
   );
+  saveBestButton.parent("controls");
 
   pauseButton = createButton('Pause');
   pauseButton.mousePressed(togglePause);
+  pauseButton.parent("controls");
 
   reset(false);
 }

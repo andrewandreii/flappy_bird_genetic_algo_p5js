@@ -15,7 +15,7 @@ class Bird {
         this.lift = -10;
         this.velocity = 0;
 
-        this.y = 64;
+        this.y = height / 2;
         this.x = 64;
 
         this.score = 0;
@@ -65,7 +65,11 @@ class Bird {
         colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
-        ellipse(this.x, this.y, max(this.width, this.height) + 5);
+        if (this.highlight) {
+            ellipse(this.x, this.y, max(this.width, this.height) + 100);
+        } else {
+            ellipse(this.x, this.y, max(this.width, this.height) + 5);
+        }
         image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }
 

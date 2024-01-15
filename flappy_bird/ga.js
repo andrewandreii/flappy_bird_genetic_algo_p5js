@@ -25,7 +25,7 @@ function nextGeneration() {
 
     birds = [];
     bestNumOfKids = 0;
-    for (let i = 0; i < populationSize.value(); ++ i) {
+    for (let i = 0; i < populationSize.value() - 1; ++ i) {
         // let parent = pickOne();
         
         // if (parent.color == bestScoreColor) {
@@ -41,30 +41,19 @@ function nextGeneration() {
         //     parents[1] = pickOne();
         // }
 
-        let child = new Bird(crossover(parents, 0.3, mutateFunc), parents[0].color.map(function (x) { return mutateBy(x, 0.1 * 255); }));
+        let child = new Bird(crossover(parents, 0.3, function (x) { return mutateBy(x, (avg_fitness - (parents[0].fitness + parents[1].fitness) / 2) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); }), meanColor(parents[0].color, parents[1].color));
+        print(child.x, child.y);
 
         birds.push(child);
     }
 
     let savedBird = new Bird(bestBrain, bestScoreColor);
+    savedBird.highlight = true;
     birds.push(savedBird);
 }
 
-function meanColor(parents) {
-    let color_sum = parents[0].color;
-
-    for (let i = 0; i < parents.length; ++ i) {
-        for (let j = 0; j < color_sum.length; ++ j) {
-            color_sum[j] += parents[i].color[j];
-        }
-    }
-
-    let p_len = parents.length;
-    for (let c in color_sum) {
-        color_sum[c] /= p_len;
-    }
-
-    return color_sum;
+function meanColor(p1, p2) {
+    return p1.map((v, idx, arr) => (p1[idx] + v) / 2);
 }
 
 function pickOne() {
@@ -145,7 +134,10 @@ function calculateFitness() {
     }
 
     bestEachGen.push(savedBirds[bestIdx]);
-    bestBrain = savedBirds[bestIdx].brain;
+    bestBrain = savedBirds[bestIdx].brain.copy();
+    print(bestIdx);
+    print(savedBirds[bestIdx].brain);
+    print(bestBrain);
 
     for (let i = 0; i < savedBirds.length; ++ i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
