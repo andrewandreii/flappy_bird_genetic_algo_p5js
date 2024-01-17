@@ -93,23 +93,14 @@
 
     .form-range {
       /* width: 100%; */
+      -webkit-appearance: none;
       height: add(var(--form-range-thumb-height), var(--form-range-thumb-focus-box-shadow-width) * 2);
       padding: 0;
       background-color: transparent;
       appearance: none;
 
-      &:hover {
-        outline: 0;
-
-        &::-moz-range-thumb, &::-webkit-slider-thumb {
-          /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
-          animation: 100ms linear 0s slider-hover-anim;
-          animation-fill-mode: forwards;
-        }
-      }
-
       &:hover::after {
-        &::-moz-range-thumb, &::-webkit-slider-thumb {
+        &::-moz-range-thumb {
           /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
           animation: 10s linear 0s slider-hover-anim;
           animation-direction: reverse;
@@ -120,31 +111,6 @@
         border: 0;
       }
 
-      &::-webkit-slider-thumb {
-        width: var(--form-range-thumb-width);
-        height: var(--form-range-thumb-height);
-        margin-top: (var(--form-range-track-height) - var(--form-range-thumb-height)) * .5;
-        border: var(--form-range-thumb-border);
-        border-radius: var(--form-range-thumb-border-radius);
-        appearance: none;
-
-        &:active {
-          /* @include gradient-bg($form-range-thumb-active-bg); */
-        }
-        &:hover {
-          width: 50px;
-        }
-      }
-
-      &::-webkit-slider-runnable-track {
-        width: var(--form-range-track-width);
-        height: var(--form-range-track-height);
-        color: transparent;
-        cursor: var(--form-range-track-cursor);
-        background-color: var(--form-range-track-bg);
-        border-color: transparent;
-      }
-
       &::-moz-range-thumb {
         width: var(--form-range-thumb-width);
         height: var(--form-range-thumb-height);
@@ -152,9 +118,6 @@
         border-radius: var(--form-range-thumb-border-radius);
         appearance: none;
 
-        &:active {
-          width: 50px;
-        }
         &:hover {
           width: 50px;
         }
@@ -168,6 +131,35 @@
         background-color: var(--form-range-track-bg);
         border-color: transparent;
       }
+    }
+
+    .form-range::-webkit-slider-thumb {
+      width: var(--form-range-thumb-width);
+      height: var(--form-range-thumb-height);
+      margin-top: calc((var(--form-range-track-height) - var(--form-range-thumb-height)) * .5);
+      border: var(--form-range-thumb-border);
+      border-radius: var(--form-range-thumb-border-radius);
+      appearance: none;
+      background-color: #ffffff;
+    }
+
+    .form-range:hover {
+      outline: 0;
+    }
+
+    .form-range:hover::-moz-range-thumb, .form-range:hover::-webkit-slider-thumb {
+      /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
+      animation: 100ms linear 0s slider-hover-anim;
+      animation-fill-mode: forwards;
+    }
+
+    .form-range::-webkit-slider-runnable-track {
+      width: var(--form-range-track-width);
+      height: var(--form-range-track-height);
+      color: transparent;
+      cursor: var(--form-range-track-cursor);
+      background-color: var(--form-range-track-bg);
+      border-color: transparent;
     }
 
     button {
