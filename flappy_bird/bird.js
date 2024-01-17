@@ -1,6 +1,7 @@
 class Bird {
     default_sprite = null;
     lift = 10;
+    flip_sprite = null;
 
     in_nodes = 4;
     hid_nodes = 4;
@@ -23,6 +24,7 @@ class Bird {
         this.color = [];
 
         this.dead = false;
+        this.flip = false;
 
         if (sprite != null) {
             this.sprite = sprite;
@@ -67,15 +69,17 @@ class Bird {
         noStroke();
         fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
         if (this.highlight) {
-            ellipse(this.x, this.y, max(this.width, this.height) + 100);
+            ellipse(this.x, this.y, max(this.width, this.height) + 20);
         } else {
-            ellipse(this.x, this.y, max(this.width, this.height) + 5);
+            ellipse(this.x , this.y - 10, max(this.width, this.height) + 5);
         }
-        image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+        image(this.sprite, this.x - this.width / 2 , this.y - this.height / 2 , this.width, this.height);
     }
 
     up() {
         this.velocity = -this.lift;
+        this.flip = 15;
+        this.sprite = Bird.flip_sprite;
     }
 
     make_decision(pipes) {
@@ -93,9 +97,13 @@ class Bird {
 
     update() {
         ++ this.score;
+        this.flip --;
+        if(this.flip <= 0)
+            this.sprite = Bird.default_sprite;
 
         this.velocity += this.gravity;
         this.y += this.velocity;
+
 
         if (this.y >= height - this.height / 2) {
             // this.y = height - this.height / 2;

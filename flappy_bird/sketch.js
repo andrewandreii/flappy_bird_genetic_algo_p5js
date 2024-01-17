@@ -42,6 +42,7 @@ function preload() {
   pipeBodySprite = getResource('gate.png');
   pipePeakSprite = getResource('gate.png');
   Bird.default_sprite = getResource('pixil-frame-0 (15).png');
+  Bird.flip_sprite = getResource('pixil-frame-0 (14).png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
   pipeFrequancy = 0;
