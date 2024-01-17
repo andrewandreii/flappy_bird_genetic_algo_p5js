@@ -1,5 +1,13 @@
 const DEFAULT_POPULATION_SIZE = 1000;
+
+// GUI
 var populationSize;
+var birdLift;
+var resetButton;
+var pauseButton;
+
+var isPaused = false;
+
 var birds;
 var savedBirds;
 var pipes;
@@ -16,16 +24,12 @@ var bgX;
 const maxGap = 240;
 const minGap = 160;
 var gapThightteningRate = 0.03;
-const minPipePeriod = 90;
-const maxPipePeriod = 150; // every 150 frames
+const MIN_PIPE_PERIOD = 90;
+const MAX_PIPE_PERIOD = 150; // every 150 frames
 var periodShorteningRate = 0.03;
-var pipePeriod = maxPipePeriod;
+var pipePeriod = MAX_PIPE_PERIOD;
 var minGapReached = maxGap;
 var pipePeriodCheck = 0;
-
-var saveBestButton;
-var pauseButton;
-var isPaused = false;
 
 const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
@@ -34,33 +38,23 @@ function terrainDifficulty(gapSize) {
   return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
 
-function getResource(filename) {
-  return loadImage(resourcesPath + filename);
-}
-
 function preload() {
   pipeBodySprite = getResource('gate.png');
   pipePeakSprite = getResource('gate.png');
-  Bird.default_sprite = getResource('bird_down.png');
-  Bird.flip_sprite = getResource('bird_up.png');
+  Bird.default_sprite = getResource('pixil-frame-0 (15).png');
+  Bird.flip_sprite = getResource('pixil-frame-0 (14).png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
   pipeFrequancy = 0;
 }
 
-function setup() {
-  createCanvas(800, 600);
-
-  populationSize = createSlider(30, 700, DEFAULT_POPULATION_SIZE, 5);
-  populationSize.parent("controls");
-
+function initBirds() {
   birds = [];
-  Bird.sizeColony = populationSize.value();
-  let hueCounter = 0;;
+  Bird.sizeColony = populationSize.value;
+  let hueCounter = 0;
+  for (let i = 0; i < populationSize.value; ++i) {
 
-  for (let i = 0; i < populationSize.value(); ++i) {
-
-    let color = i * (360 / populationSize.value());
+    let color = i * (360 / populationSize.value);
     hueCounter += color;
 
     if (hueCounter > 5) {
@@ -87,19 +81,20 @@ function initGUI() {
   resetButton = document.getElementById("resetButton")
   resetButton.addEventListener("click",
     function (e) {
-      if (window.isSecureContext) {
-        Navigator.clipboard.writeText(JSON.stringify(bestEachGen));
-      } else {
-        alert('must use https for this feature, text printed to console');
-        print(JSON.stringify(bestEachGen.map(function (x) { return x.decision; })));
-      }
+      initBirds();
+      reset(false);
     }
   );
-  saveBestButton.parent("controls");
 
-  pauseButton = createButton('Pause');
-  pauseButton.mousePressed(togglePause);
-  pauseButton.parent("controls");
+  pauseButton = document.getElementById("pauseButton");
+  pauseButton.addEventListener("click", togglePause);
+}
+
+function setup() {
+  createCanvas(800, 600);
+
+  initGUI();
+  initBirds();
 
   reset(false);
 }
@@ -125,7 +120,7 @@ function draw() {
     reset(true);
   }
 
-  for (let i = pipes.length - 1; i >= 0; i--) {
+  for (let i = pipes.length - 1; i >= 0; -- i) {
     pipes[i].update();
     pipes[i].show();
 
@@ -140,7 +135,6 @@ function draw() {
     }
 
   }
-
 
   for (let i = 0; i < birds.length;) {
     birds[i].make_decision(pipes);
@@ -161,8 +155,8 @@ function draw() {
       minGapReached = Pipe.spacing;
     }
 
-    if (pipePeriod > minPipePeriod) {
-      pipePeriod += floor((minPipePeriod - maxPipePeriod) * periodShorteningRate);
+    if (pipePeriod > MIN_PIPE_PERIOD) {
+      pipePeriod += floor((MIN_PIPE_PERIOD - MAX_PIPE_PERIOD) * periodShorteningRate);
       pipePeriodCheck = frameCount % pipePeriod;
     }
 
@@ -190,9 +184,7 @@ function reset(nextGen) {
   Bird.lift = int(birdLift.value);
 
   Pipe.spacing = maxGap;
-  let posInPeriod = frameCount % pipePeriod;
-  // pipePeriodCheck = posInPeriod < pipePeriodCheck ? pipePeriodCheck % maxPipePeriod : (posInPeriod + pipePeriod - (posInPeriod - pipePeriodCheck)) % maxPipePeriod;
-  pipePeriod = maxPipePeriod;
+  pipePeriod = MAX_PIPE_PERIOD;
   pipePeriodCheck = 0;
   frameCount = 0; // Dirty fix
   pipes = [];
