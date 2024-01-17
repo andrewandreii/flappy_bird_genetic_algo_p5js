@@ -166,7 +166,7 @@ function draw() {
   let info_values = [
     ngen, bestScore,
     (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
-    (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
+    (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%',
     populationSize.value
   ];
   showInfo(INFO_TEXT, info_values, TEXT_SIZE, TEXT_PADDING);
@@ -175,9 +175,12 @@ function draw() {
 function reset(nextGen) {
   bgX = 0;
 
-  bestScore = 0;
-  minGapReached = maxGap;
-  ngen = 1;
+  if (!nextGen) {
+    bestScore = 0;
+    minGapReached = maxGap;
+    ngen = 1;
+  }
+  
   Bird.lift = int(birdLift.value);
 
   Pipe.spacing = maxGap;

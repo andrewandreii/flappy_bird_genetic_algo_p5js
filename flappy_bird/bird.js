@@ -18,7 +18,7 @@ class Bird {
         this.velocity = 0;
 
         this.y = height / 2;
-        this.x = 64;
+        this.x = 64 + random(-20, 20);
 
         this.score = 0;
         this.color = [];
@@ -38,41 +38,14 @@ class Bird {
             this.brain = new NeuralNetwork(this.in_nodes, this.hid_nodes, this.out_nodes);
         }
 
-        if (color) {
-            this.color = color;
-
-            //colorMode(HSB, 360, 100, 100);
-            // this.sprite.loadPixels();
-            // for(let i = 0; i <= this.sprite.height; i++){
-            //     for(let j = 0; j <= this.sprite.width; j++){
-            //         if(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] == 0){
-            //             //this.sprite.pixels[i * this.sprite.width + j] = this.color;
-            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4] = 255;
-            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] = 255;
-            //         }
-            //         // else{
-            //         //     // print("hello");
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4]);
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 1]);
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 2]);
-            //         // }
-            //     }
-            // }
-            // this.sprite.updatePixels();
-            // colorMode(RGB,255);
-        }
-        // TODO: implement color based on genetic code
+        this.color = color;
     }
 
     show() {
         colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
-        if (this.highlight) {
-            ellipse(this.x, this.y, max(this.width, this.height) + 20);
-        } else {
-            ellipse(this.x , this.y - 10, max(this.width, this.height) + 5);
-        }
+        ellipse(this.x , this.y - 10, max(this.width, this.height) + 5);
         image(this.sprite, this.x - this.width / 2 , this.y - this.height / 2 , this.width, this.height);
     }
 
