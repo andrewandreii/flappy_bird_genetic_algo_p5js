@@ -1,6 +1,6 @@
 class Bird {
     default_sprite = null;
-    lift = 10;
+    static lift = 10;
     flip_sprite = null;
 
     in_nodes = 4;
@@ -14,7 +14,7 @@ class Bird {
         this.height = 64;
 
         this.gravity = 0.6;
-        // this.lift = -Bird.lift;
+        this.lift = Bird.lift;
         this.velocity = 0;
 
         this.y = height / 2;

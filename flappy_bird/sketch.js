@@ -74,6 +74,7 @@ function initBirds() {
 
 function initGUI() {
   populationSize = document.getElementById("populationSize");
+  populationSize.value = DEFAULT_POPULATION_SIZE;
 
   birdLift = document.getElementById("birdLift");
 
@@ -98,7 +99,7 @@ function setup() {
   reset(false);
 }
 
-function draw() {
+function parallax_background() {
   background(0);
   image(bgImg, bgX, 0, bgImg.width, height);
   bgX -= pipes[0].speed * parallax;
@@ -109,16 +110,21 @@ function draw() {
       bgX = 0;
     }
   }
+}
+
+const INFO_TEXT = ["Generation", "Best score", "Terrain difficulty", "Hardest terrain reached", "Population size"]
+function draw() {
+  parallax_background();
 
   if (birds.length == 0) {
     reset(true);
   }
 
-  for (let i = pipes.length - 1; i >= 0; i--) {
+  for (let i = pipes.length - 1; i >= 0; -- i) {
     pipes[i].update();
     pipes[i].show();
 
-    for (let j = 0; j < birds.length; ++j) {
+    for (let j = 0; j < birds.length; ++ j) {
       if (pipes[i].hits(birds[j])) {
         savedBirds.push(birds.splice(j, 1)[0]);
       }
@@ -157,36 +163,13 @@ function draw() {
     pipes.push(new Pipe());
   }
 
-  showInfo();
-}
-
-function togglePause() {
-  if (!isPaused) {
-    textAlign(CENTER, CENTER);
-    fill(0);
-    textSize(40);
-    text('Paused', width / 2, height / 2);
-    frameRate(0);
-  } else {
-    textAlign(LEFT, BASELINE);
-    frameRate(60);
-  }
-  isPaused = !isPaused;
-}
-
-function showInfo() {
-  textSize(TEXT_SIZE);
-  stroke(0);
-
-  let textPos = TEXT_PADDING + TEXT_SIZE;
-
-  fill(bestScoreColor);
-  text('Best score: ' + bestScore, TEXT_PADDING, textPos);
-  fill(255);
-  text('Terrain difficulty: ' + (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%', TEXT_PADDING, textPos * 2);
-  text('Hardest terrain reached: ' + (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%', TEXT_PADDING, textPos * 3);
-  text('Population size: ' + populationSize.value, TEXT_PADDING, textPos * 4);
-  text('Generation #' + ngen, TEXT_PADDING, height - TEXT_SIZE - TEXT_PADDING);
+  let info_values = [
+    ngen, bestScore,
+    (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
+    (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
+    populationSize.value
+  ];
+  showInfo(INFO_TEXT, info_values, TEXT_SIZE, TEXT_PADDING);
 }
 
 function reset(nextGen) {
@@ -195,7 +178,7 @@ function reset(nextGen) {
   bestScore = 0;
   minGapReached = maxGap;
   ngen = 1;
-  Bird.lift = birdLift.value;
+  Bird.lift = int(birdLift.value);
 
   Pipe.spacing = maxGap;
   pipePeriod = MAX_PIPE_PERIOD;
