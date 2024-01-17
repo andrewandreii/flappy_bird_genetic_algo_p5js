@@ -39,41 +39,14 @@ class Bird {
             this.brain = new NeuralNetwork(this.in_nodes, this.hid_nodes, this.out_nodes);
         }
 
-        if (color) {
-            this.color = color;
-
-            //colorMode(HSB, 360, 100, 100);
-            // this.sprite.loadPixels();
-            // for(let i = 0; i <= this.sprite.height; i++){
-            //     for(let j = 0; j <= this.sprite.width; j++){
-            //         if(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] == 0){
-            //             //this.sprite.pixels[i * this.sprite.width + j] = this.color;
-            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4] = 255;
-            //             this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 3] = 255;
-            //         }
-            //         // else{
-            //         //     // print("hello");
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4]);
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 1]);
-            //         //     // print(this.sprite.pixels[i * this.sprite.width * 4 + j * 4 + 2]);
-            //         // }
-            //     }
-            // }
-            // this.sprite.updatePixels();
-            // colorMode(RGB,255);
-        }
-        // TODO: implement color based on genetic code
+        this.color = color;
     }
 
     show() {
         colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
-        // if (this.highlight) {
-        //     ellipse(this.x, this.y, max(this.width, this.height) );
-        // } else {
         ellipse(this.x , this.y , max(this.width, this.height) + 12);
-        // }
         image(this.sprite, this.x - this.width / 2 , this.y - this.height / 2 , this.width, this.height);
     }
 
@@ -101,22 +74,15 @@ class Bird {
     update() {
         ++ this.score;
         this.flip --;
-        if(this.flip <= 0)
+        if(this.flip <= 0) {
             this.sprite = Bird.flip_sprite;
+        }
 
         this.velocity += this.gravity;
         this.y += this.velocity;
 
 
-        if (this.y >= height - this.height / 2) {
-            // this.y = height - this.height / 2;
-            // this.velocity = 0;
-            this.dead = true;
-          }
-      
-        if (this.y <= this.height / 2) {
-            // this.y = this.height / 2;
-            // this.velocity = 0;
+        if (this.y >= height - this.height / 2 || this.y <= this.height / 2) {
             this.dead = true;
         }
     }
