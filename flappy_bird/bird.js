@@ -14,7 +14,6 @@ class Bird {
         this.height = 64;
 
         this.gravity = 0.6;
-        this.lift = Bird.lift;
         this.velocity = 0;
 
         this.y = height / 2;
@@ -50,8 +49,10 @@ class Bird {
     }
 
     up() {
-        this.velocity = -this.lift;
-        this.flip = 15;
+        this.velocity = -Bird.lift;
+        if (this.flip <= 15) {
+            this.flip = 15;
+        }
         this.sprite = Bird.flip_sprite;
     }
 
