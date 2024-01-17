@@ -17,13 +17,14 @@ function showInfo(labels, values, text_size, margin) {
 
 function togglePause() {
     if (frameRate() != 0) {
-        textAlign(CENTER, CENTER);
-        fill(0);
-        textSize(40);
-        text('Paused', width / 2, height / 2);
-        frameRate(0);
+      textAlign(CENTER, CENTER);
+      fill(0);
+      textSize(40);
+      text('Paused', width / 2, height / 2);
+      frameRate(0);
     } else {
-        textAlign(LEFT, BASELINE);
-        frameRate(60);
+      textAlign(LEFT, BASELINE);
+      frameRate(60);
     }
-}
+  }
+  

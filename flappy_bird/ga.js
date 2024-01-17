@@ -46,7 +46,6 @@ function nextGeneration() {
 
         birds.push(child);
     }
-    print(birds.length, " birds");
 
     let savedBird = new Bird(bestBrain, bestScoreColor);
     savedBird.highlight = true;
@@ -121,6 +120,8 @@ function crossover(parents, pmutation, mutateFunc) {
 }
 
 function calculateFitness() {
+    // print(savedBirds);
+
     let sum = 0;
     let bestIdx = 0;
     for (let i = 0; i < savedBirds.length; ++ i) {
@@ -141,6 +142,8 @@ function calculateFitness() {
     for (let i = 0; i < savedBirds.length; ++ i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
     }
+
+    // print(savedBirds.map(function (x) { return x.fitness; }));
 
     return sum;
 }
