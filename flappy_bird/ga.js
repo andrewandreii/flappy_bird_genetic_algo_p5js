@@ -53,7 +53,7 @@ function nextGeneration() {
 }
 
 function meanColor(p1, p2) {
-    return p1.map((v, idx, arr) => (p1[idx] + v) / 2);
+    return p1.map((v, idx, arr) => (p2[idx] + v) / 2);
 }
 
 function pickOne() {

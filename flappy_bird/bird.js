@@ -21,6 +21,7 @@ class Bird {
 
         this.score = 0;
         this.color = [];
+        this.parents = [];
 
         this.dead = false;
         this.flip = false;
@@ -67,18 +68,18 @@ class Bird {
         colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
-        if (this.highlight) {
-            ellipse(this.x, this.y, max(this.width, this.height) + 20);
-        } else {
-            ellipse(this.x , this.y - 10, max(this.width, this.height) + 5);
-        }
+        // if (this.highlight) {
+        //     ellipse(this.x, this.y, max(this.width, this.height) );
+        // } else {
+        ellipse(this.x , this.y , max(this.width, this.height) + 12);
+        // }
         image(this.sprite, this.x - this.width / 2 , this.y - this.height / 2 , this.width, this.height);
     }
 
     up() {
         this.velocity = this.lift;
         this.flip = 15;
-        this.sprite = Bird.flip_sprite;
+        this.sprite = Bird.default_sprite;
     }
 
     make_decision(pipes) {
@@ -98,7 +99,7 @@ class Bird {
         ++ this.score;
         this.flip --;
         if(this.flip <= 0)
-            this.sprite = Bird.default_sprite;
+            this.sprite = Bird.flip_sprite;
 
         this.velocity += this.gravity;
         this.y += this.velocity;
