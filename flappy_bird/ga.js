@@ -25,7 +25,7 @@ function nextGeneration() {
 
     birds = [];
     bestNumOfKids = 0;
-    for (let i = 0; i < populationSize.value() - 1; ++ i) {
+    for (let i = 0; i < populationSize.value - 1; ++ i) {
         // let parent = pickOne();
         
         // if (parent.color == bestScoreColor) {
