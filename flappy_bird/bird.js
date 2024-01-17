@@ -1,5 +1,6 @@
 class Bird {
     default_sprite = null;
+    lift = 10;
 
     in_nodes = 4;
     hid_nodes = 4;
@@ -12,7 +13,7 @@ class Bird {
         this.height = 64;
 
         this.gravity = 0.6;
-        this.lift = -10;
+        // this.lift = -Bird.lift;
         this.velocity = 0;
 
         this.y = height / 2;
@@ -74,7 +75,7 @@ class Bird {
     }
 
     up() {
-        this.velocity = this.lift;
+        this.velocity = -this.lift;
     }
 
     make_decision(pipes) {
@@ -85,7 +86,7 @@ class Bird {
         inputs[3] = pipes[0].x / width;
 
         let output = this.brain.predict(inputs);
-        if(output[0] > 0.5){
+        if(output[0] > 0.50) {
             this.up();
         }
     }

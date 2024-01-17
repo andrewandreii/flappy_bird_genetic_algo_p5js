@@ -6,11 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js example</title>
   <style>
-    /* body {
-      padding: 0;
-      margin: 0;
-      background-color: #1b1b1b;
-    } */
+    :root {
+      --bg-dark: #1f2335;
+      --bg: #24283b;
+      --bg-highlight: #292e42;
+      --blue1: #2ac3de;
+      --blue2: #0db9d7;
+      --blue5: #89ddff;
+      --blue6: #b4f9f8;
+      --blue7: #394b70;
+      --fg: #c0caf5;
+      --fg-dark: #a9b1d6;
+      --form-range-thumb-height: 20px;
+      --form-range-thumb-width: 20px;
+      --form-range-thumb-focus-box-shadow-color: var(--blue1);
+      --form-range-thumb-focus-box-shadow: 0px 0px 8px var(--form-range-thumb-focus-box-shadow-color);
+      --form-range-thumb-border-radius: 50%;
+      --form-range-thumb-focus-border-radius: 35%;
+      --form-range-track-width: auto;
+      --form-range-track-height: 5px;
+      --form-range-track-bg: var(--blue2);
+    }
+
     html, body {
       height: 100%;
     }
@@ -19,13 +36,14 @@
       margin: 0;
       display: flex;
       flex-direction: row;
-      background: #16161e;
-
-      /* This centers our sketch horizontally. */
+      background: var(--bg-dark);
       justify-content: center;
-
-      /* This centers our sketch vertically. */
       align-items: center;
+    }
+
+    canvas {
+      border-radius: 1%;
+      margin-bottom: 10px;
     }
 
     #main-div {
@@ -33,6 +51,7 @@
       display: flex;
       margin-right: 10px;
       margin-left: 10px;
+      height: 90%;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -40,30 +59,139 @@
 
     #controls {
       margin: 0;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
+      border-radius: 1%;
+      background-color: var(--bg);
+      grid-template-columns: auto auto;
+      margin-top: 10px;
+      flex-grow: 1;
+      width: 100%;
+      display: grid;
+      gap: 10px;
       align-items: center;
+      justify-content: space-around;
     }
 
     #docs {
       height: 90%;
       width: 50%;
+      border-radius: 1%;
       margin-left: 10px;
       margin-right: 10px;
-      background: #232533;
+      background: var(--bg);
     }
 
-    input[type="range"] {
+    @keyframes slider-hover-anim {
+      from {
+        box-shadow: none;
+        border-radius: var(--form-range-thumb-border-radius);
+      }
+      to {
+        box-shadow: var(--form-range-thumb-focus-box-shadow);
+        border-radius: var(--form-range-thumb-focus-border-radius);
+      }
+    }
+
+    .form-range {
+      /* width: 100%; */
+      height: add(var(--form-range-thumb-height), var(--form-range-thumb-focus-box-shadow-width) * 2);
+      padding: 0;
+      background-color: transparent;
       appearance: none;
-      background: aqua;
-      height: 4px;
-      margin: 4px;
-      cursor: pointer;
+
+      &:hover {
+        outline: 0;
+
+        &::-moz-range-thumb, &::-webkit-slider-thumb {
+          /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
+          animation: 100ms linear 0s slider-hover-anim;
+          animation-fill-mode: forwards;
+        }
+      }
+
+      &:hover::after {
+        &::-moz-range-thumb, &::-webkit-slider-thumb {
+          /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
+          animation: 10s linear 0s slider-hover-anim;
+          animation-direction: reverse;
+        }
+      }
+
+      &::-moz-focus-outer {
+        border: 0;
+      }
+
+      &::-webkit-slider-thumb {
+        width: var(--form-range-thumb-width);
+        height: var(--form-range-thumb-height);
+        margin-top: (var(--form-range-track-height) - var(--form-range-thumb-height)) * .5;
+        border: var(--form-range-thumb-border);
+        border-radius: var(--form-range-thumb-border-radius);
+        appearance: none;
+
+        &:active {
+          /* @include gradient-bg($form-range-thumb-active-bg); */
+        }
+        &:hover {
+          width: 50px;
+        }
+      }
+
+      &::-webkit-slider-runnable-track {
+        width: var(--form-range-track-width);
+        height: var(--form-range-track-height);
+        color: transparent;
+        cursor: var(--form-range-track-cursor);
+        background-color: var(--form-range-track-bg);
+        border-color: transparent;
+      }
+
+      &::-moz-range-thumb {
+        width: var(--form-range-thumb-width);
+        height: var(--form-range-thumb-height);
+        border: var(--form-range-thumb-border);
+        border-radius: var(--form-range-thumb-border-radius);
+        appearance: none;
+
+        &:active {
+          width: 50px;
+        }
+        &:hover {
+          width: 50px;
+        }
+      }
+
+      &::-moz-range-track {
+        width: var(--form-range-track-width);
+        height: var(--form-range-track-height);
+        color: transparent;
+        cursor: var(--form-range-track-cursor);
+        background-color: var(--form-range-track-bg);
+        border-color: transparent;
+      }
+    }
+
+    button {
+      padding: 10px;
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
+      border-radius: 5px;
+      background-color: var(--bg-highlight);
+      color: var(--fg);
+      border: none;
+    }
+
+    button:hover {
+      background-color: var(--fg-dark);
+    }
+
+    span {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
     }
   </style>
   <script src="../p5.min.js"></script>
-  <!-- <script src="../addons/p5.sound.js"></script> -->
   <script src="../neural_network/matrix.js"></script>
   <script src="../neural_network/nn.js"></script>
   <script src="sketch.js"></script>
@@ -76,7 +204,18 @@
   <div id="main-div">
     <main>
     </main>
-    <div id="controls"></div>
+    <div id="controls">
+    <span>
+      Population size:
+      <input id="populationSize" type="range" min="30" max="700" step="10" class="form-range">
+    </span>
+    <button id="pauseButton">Pause</button>
+    <span>
+      Bird jump height (when reset):
+      <input id="birdLift" type="range" min="2" max="10" step="1" class="form-range">
+    </span>
+    <button id="resetButton">Reset</button>
+    </div>
   </div>
   <div id="docs"></div>
 </body>
