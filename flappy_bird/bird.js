@@ -12,6 +12,7 @@ class Bird {
     constructor(brain, color, sprite) {
         this.width = 64;
         this.height = 64;
+        this.id;
 
         this.gravity = 0.6;
         // this.lift = -Bird.lift;
