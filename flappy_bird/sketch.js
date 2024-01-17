@@ -41,8 +41,8 @@ function getResource(filename) {
 function preload() {
   pipeBodySprite = getResource('gate.png');
   pipePeakSprite = getResource('gate.png');
-  Bird.default_sprite = getResource('bird_up.png');
-  Bird.flip_sprite = getResource('bird_down.png');
+  Bird.default_sprite = getResource('bird_down.png');
+  Bird.flip_sprite = getResource('bird_up.png');
   Pipe.spacing = maxGap;
   bgImg = getResource('background.png');
   pipeFrequancy = 0;
