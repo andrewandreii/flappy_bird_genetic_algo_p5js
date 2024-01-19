@@ -24,6 +24,7 @@ class Bird {
 
         this.dead = false;
         this.flip = 0;
+        this.is_flipped = false;
 
         if (brain) {
             this.brain = brain.copy();
@@ -40,17 +41,14 @@ class Bird {
         fill(floor(this.color[0]), floor(this.color[1]), floor(this.color[2]));
         ellipse(this.x, this.y, max(this.width, this.height) + 12);
         if (noImages == false) {
-            image(birdSprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+            image(this.is_flipped ? birdSprite : birdFlipSprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
         }
     }
 
     up() {
         this.velocity = -Bird.lift;
-        if (this.flip <= 15) {
-            this.flip = 15;
-        }
-
-        // this.sprite = Bird.flip_sprite;
+        this.flip = 15;
+        this.is_flipped = true;
     }
 
     make_decision(pipes) {
@@ -71,7 +69,7 @@ class Bird {
 
         --this.flip;
         if (this.flip <= 0) {
-            // this.sprite = Bird.default_sprite;
+            this.is_flipped = false;
         }
 
         this.velocity += this.gravity;
