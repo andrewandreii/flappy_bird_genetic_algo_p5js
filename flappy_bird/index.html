@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>p5.js example</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <style>
     :root {
       --bg-dark: #1f2335;
@@ -17,15 +18,7 @@
       --blue7: #394b70;
       --fg: #c0caf5;
       --fg-dark: #a9b1d6;
-      --form-range-thumb-height: 20px;
-      --form-range-thumb-width: 20px;
-      --form-range-thumb-focus-box-shadow-color: var(--blue1);
-      --form-range-thumb-focus-box-shadow: 0px 0px 8px var(--form-range-thumb-focus-box-shadow-color);
-      --form-range-thumb-border-radius: 50%;
-      --form-range-thumb-focus-border-radius: 35%;
-      --form-range-track-width: auto;
-      --form-range-track-height: 5px;
-      --form-range-track-bg: var(--blue2);
+
     }
 
     html, body {
@@ -78,88 +71,6 @@
       margin-left: 10px;
       margin-right: 10px;
       background: var(--bg);
-    }
-
-    @keyframes slider-hover-anim {
-      from {
-        box-shadow: none;
-        border-radius: var(--form-range-thumb-border-radius);
-      }
-      to {
-        box-shadow: var(--form-range-thumb-focus-box-shadow);
-        border-radius: var(--form-range-thumb-focus-border-radius);
-      }
-    }
-
-    .form-range {
-      /* width: 100%; */
-      -webkit-appearance: none;
-      height: add(var(--form-range-thumb-height), var(--form-range-thumb-focus-box-shadow-width) * 2);
-      padding: 0;
-      background-color: transparent;
-      appearance: none;
-
-      &:hover::after {
-        &::-moz-range-thumb {
-          /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
-          animation: 10s linear 0s slider-hover-anim;
-          animation-direction: reverse;
-        }
-      }
-
-      &::-moz-focus-outer {
-        border: 0;
-      }
-
-      &::-moz-range-thumb {
-        width: var(--form-range-thumb-width);
-        height: var(--form-range-thumb-height);
-        border: var(--form-range-thumb-border);
-        border-radius: var(--form-range-thumb-border-radius);
-        appearance: none;
-
-        &:hover {
-          width: 50px;
-        }
-      }
-
-      &::-moz-range-track {
-        width: var(--form-range-track-width);
-        height: var(--form-range-track-height);
-        color: transparent;
-        cursor: var(--form-range-track-cursor);
-        background-color: var(--form-range-track-bg);
-        border-color: transparent;
-      }
-    }
-
-    .form-range::-webkit-slider-thumb {
-      width: var(--form-range-thumb-width);
-      height: var(--form-range-thumb-height);
-      margin-top: calc((var(--form-range-track-height) - var(--form-range-thumb-height)) * .5);
-      border: var(--form-range-thumb-border);
-      border-radius: var(--form-range-thumb-border-radius);
-      appearance: none;
-      background-color: #ffffff;
-    }
-
-    .form-range:hover {
-      outline: 0;
-    }
-
-    .form-range:hover::-moz-range-thumb, .form-range:hover::-webkit-slider-thumb {
-      /* box-shadow: var(--form-range-thumb-focus-box-shadow); */
-      animation: 100ms linear 0s slider-hover-anim;
-      animation-fill-mode: forwards;
-    }
-
-    .form-range::-webkit-slider-runnable-track {
-      width: var(--form-range-track-width);
-      height: var(--form-range-track-height);
-      color: transparent;
-      cursor: var(--form-range-track-cursor);
-      background-color: var(--form-range-track-bg);
-      border-color: transparent;
     }
 
     button {
