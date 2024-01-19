@@ -35,166 +35,166 @@ const TEXT_SIZE = 20;
 const TEXT_PADDING = 5;
 
 function terrainDifficulty(gapSize) {
-  return 1 - (gapSize - minGap) / (maxGap - minGap);
+    return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
 
 function preload() {
-  pipeBodySprite = getResource('gate.png');
-  pipePeakSprite = getResource('gate.png');
-  Bird.default_sprite = getResource('bird_up.png');
-  Bird.flip_sprite = getResource('bird_down.png');
-  Pipe.spacing = maxGap;
-  bgImg = getResource('background.png');
-  pipeFrequancy = 0;
+    pipeBodySprite = getResource('gate.png');
+    pipePeakSprite = getResource('gate.png');
+    Bird.default_sprite = getResource('bird_up.png');
+    Bird.flip_sprite = getResource('bird_down.png');
+    Pipe.spacing = maxGap;
+    bgImg = getResource('background.png');
+    pipeFrequancy = 0;
 }
 
 function initBirds() {
-  birds = [];
-  Bird.sizeColony = populationSize.value;
-  let hueCounter = 0;
-  for (let i = 0; i < populationSize.value; ++i) {
+    birds = [];
+    Bird.sizeColony = populationSize.value;
+    let hueCounter = 0;
+    for (let i = 0; i < populationSize.value; ++i) {
 
-    let color = i * (360 / populationSize.value);
-    hueCounter += color;
+        let color = i * (360 / populationSize.value);
+        hueCounter += color;
 
-    if (hueCounter > 5) {
-      hueCounter = 0;
-      birds[i] = new Bird(null, [color, 100, 100]);
+        if (hueCounter > 5) {
+            hueCounter = 0;
+            birds[i] = new Bird(null, [color, 100, 100]);
+        }
+        else {
+            if (hueCounter > 2.5) {
+                birds[i] = new Bird(null, [color, 100 - 4 * hueCounter, 100]);
+            }
+            else {
+                birds[i] = new Bird(null, [color, 100, 100 - 4 * hueCounter]);
+            }
+        }
     }
-    else {
-      if (hueCounter > 2.5) {
-        birds[i] = new Bird(null, [color, 100 - 4 * hueCounter, 100]);
-      }
-      else {
-        birds[i] = new Bird(null, [color, 100, 100 - 4 * hueCounter]);
-      }
-    }
-  }
 }
 
 function initGUI() {
-  populationSize = document.getElementById("populationSize");
-  populationSize.value = DEFAULT_POPULATION_SIZE;
+    populationSize = document.getElementById("populationSize");
+    populationSize.value = DEFAULT_POPULATION_SIZE;
 
-  birdLift = document.getElementById("birdLift");
+    birdLift = document.getElementById("birdLift");
 
-  resetButton = document.getElementById("resetButton")
-  resetButton.addEventListener("click",
-    function (e) {
-      initBirds();
-      reset(false);
-    }
-  );
+    resetButton = document.getElementById("resetButton")
+    resetButton.addEventListener("click",
+        function (e) {
+            initBirds();
+            reset(false);
+        }
+    );
 
-  pauseButton = document.getElementById("pauseButton");
-  pauseButton.addEventListener("click", togglePause);
+    pauseButton = document.getElementById("pauseButton");
+    pauseButton.addEventListener("click", togglePause);
 }
 
 function setup() {
-  createCanvas(800, 600);
+    createCanvas(800, 600);
 
-  initGUI();
-  initBirds();
+    initGUI();
+    initBirds();
 
-  reset(false);
+    reset(false);
 }
 
 function parallax_background() {
-  background(0);
-  image(bgImg, bgX, 0, bgImg.width, height);
-  bgX -= pipes[0].speed * parallax;
+    background(0);
+    image(bgImg, bgX, 0, bgImg.width, height);
+    bgX -= pipes[0].speed * parallax;
 
-  if (bgX <= -bgImg.width + width) {
-    image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
-    if (bgX <= -bgImg.width) {
-      bgX = 0;
+    if (bgX <= -bgImg.width + width) {
+        image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
+        if (bgX <= -bgImg.width) {
+            bgX = 0;
+        }
     }
-  }
 }
 
 const INFO_TEXT = ["Generation", "Best score", "Terrain difficulty", "Hardest terrain reached", "Population size"]
 function draw() {
-  parallax_background();
+    parallax_background();
 
-  if (birds.length == 0) {
-    reset(true);
-  }
-
-  for (let i = pipes.length - 1; i >= 0; -- i) {
-    pipes[i].update();
-    pipes[i].show();
-
-    for (let j = 0; j < birds.length; ++ j) {
-      if (pipes[i].hits(birds[j])) {
-        savedBirds.push(birds.splice(j, 1)[0]);
-      }
+    if (birds.length == 0) {
+        reset(true);
     }
 
-    if (pipes[i].offscreen()) {
-      pipes.splice(i, 1);
+    for (let i = pipes.length - 1; i >= 0; --i) {
+        pipes[i].update();
+        pipes[i].show();
+
+        for (let j = 0; j < birds.length; ++j) {
+            if (pipes[i].hits(birds[j])) {
+                savedBirds.push(birds.splice(j, 1)[0]);
+            }
+        }
+
+        if (pipes[i].offscreen()) {
+            pipes.splice(i, 1);
+        }
+
     }
 
-  }
-
-  for (let i = 0; i < birds.length;) {
-    birds[i].make_decision(pipes);
-    birds[i].update();
-    birds[i].show();
-    if (birds[i].dead) {
-      savedBirds.push(birds.splice(i, 1)[0]);
-    } else {
-      ++i;
-    }
-  }
-
-  if (frameCount % pipePeriod == pipePeriodCheck) {
-    if (Pipe.spacing > minGap) {
-      Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
-    }
-    if (Pipe.spacing < minGapReached) {
-      minGapReached = Pipe.spacing;
+    for (let i = 0; i < birds.length;) {
+        birds[i].make_decision(pipes);
+        birds[i].update();
+        birds[i].show();
+        if (birds[i].dead) {
+            savedBirds.push(birds.splice(i, 1)[0]);
+        } else {
+            ++i;
+        }
     }
 
-    if (pipePeriod > MIN_PIPE_PERIOD) {
-      pipePeriod += floor((MIN_PIPE_PERIOD - MAX_PIPE_PERIOD) * periodShorteningRate);
-      pipePeriodCheck = frameCount % pipePeriod;
+    if (frameCount % pipePeriod == pipePeriodCheck) {
+        if (Pipe.spacing > minGap) {
+            Pipe.spacing += (minGap - maxGap) * gapThightteningRate;
+        }
+        if (Pipe.spacing < minGapReached) {
+            minGapReached = Pipe.spacing;
+        }
+
+        if (pipePeriod > MIN_PIPE_PERIOD) {
+            pipePeriod += floor((MIN_PIPE_PERIOD - MAX_PIPE_PERIOD) * periodShorteningRate);
+            pipePeriodCheck = frameCount % pipePeriod;
+        }
+
+        pipes.push(new Pipe());
     }
 
-    pipes.push(new Pipe());
-  }
-
-  let info_values = [
-    ngen, bestScore,
-    (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
-    (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%',
-    populationSize.value
-  ];
-  showInfo(INFO_TEXT, info_values, TEXT_SIZE, TEXT_PADDING);
+    let info_values = [
+        ngen, bestScore,
+        (terrainDifficulty(Pipe.spacing) * 100).toFixed(0) + '%',
+        (terrainDifficulty(minGapReached) * 100).toFixed(0) + '%',
+        populationSize.value
+    ];
+    showInfo(INFO_TEXT, info_values, TEXT_SIZE, TEXT_PADDING);
 }
 
 function reset(nextGen) {
-  bgX = 0;
+    bgX = 0;
 
-  if (!nextGen) {
-    bestScore = 0;
-    minGapReached = maxGap;
-    ngen = 1;
-  }
-  
-  Bird.lift = int(birdLift.value);
+    if (!nextGen) {
+        bestScore = 0;
+        minGapReached = maxGap;
+        ngen = 1;
+    }
 
-  Pipe.spacing = maxGap;
-  pipePeriod = MAX_PIPE_PERIOD;
-  pipePeriodCheck = 0;
-  frameCount = 0; // Dirty fix
-  pipes = [];
-  pipes.push(new Pipe());
+    Bird.lift = int(birdLift.value);
 
-  if (nextGen) {
-    nextGeneration();
-  }
+    Pipe.spacing = maxGap;
+    pipePeriod = MAX_PIPE_PERIOD;
+    pipePeriodCheck = 0;
+    frameCount = 0; // Dirty fix
+    pipes = [];
+    pipes.push(new Pipe());
 
-  savedBirds = [];
+    if (nextGen) {
+        nextGeneration();
+    }
 
-  frameCount = 1;
+    savedBirds = [];
+
+    frameCount = 1;
 }

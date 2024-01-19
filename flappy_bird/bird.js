@@ -45,9 +45,9 @@ class Bird {
     show() {
         colorMode(HSB, 360, 100, 100);
         noStroke();
-        fill(floor(this.color[0]),floor(this.color[1]),floor(this.color[2]));
-        ellipse(this.x , this.y , max(this.width, this.height) + 12);
-        image(this.sprite, this.x - this.width / 2 , this.y - this.height / 2 , this.width, this.height);
+        fill(floor(this.color[0]), floor(this.color[1]), floor(this.color[2]));
+        ellipse(this.x, this.y, max(this.width, this.height) + 12);
+        image(this.sprite, this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
     }
 
     up() {
@@ -55,7 +55,7 @@ class Bird {
         if (this.flip <= 15) {
             this.flip = 15;
         }
-        
+
         this.sprite = Bird.flip_sprite;
     }
 
@@ -67,16 +67,16 @@ class Bird {
         inputs[3] = pipes[0].x / width;
 
         let output = this.brain.predict(inputs);
-        if(output[0] > 0.50) {
+        if (output[0] > 0.50) {
             this.up();
         }
     }
 
     update() {
-        ++ this.score;
+        ++this.score;
 
-        this.flip --;
-        if(this.flip <= 0) {
+        --this.flip;
+        if (this.flip <= 0) {
             this.sprite = Bird.default_sprite;
         }
 

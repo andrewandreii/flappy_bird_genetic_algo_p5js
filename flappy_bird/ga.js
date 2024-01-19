@@ -19,15 +19,15 @@ function mutateBy(x, amount) {
 }
 
 function nextGeneration() {
-    ++ ngen;
+    ++ngen;
 
     let avg_fitness = calculateFitness() / savedBirds.length;
 
     birds = [];
     bestNumOfKids = 0;
-    for (let i = 0; i < populationSize.value - 1; ++ i) {
+    for (let i = 0; i < populationSize.value - 1; ++i) {
         // let parent = pickOne();
-        
+
         // if (parent.color == bestScoreColor) {
         //     ++ bestNumOfKids;
         // }
@@ -62,7 +62,7 @@ function pickOne() {
     let i = 0;
     while (partSum < rand && i < savedBirds.length - 1) {
         partSum += savedBirds[i].fitness;
-        ++ i;
+        ++i;
     }
 
     return savedBirds[i];
@@ -74,12 +74,12 @@ function matrixCrossover(mat1, mat2, crossover_idx) {
     if (crossover_idx == null) {
         crossover_idx = random(mat1.rows * mat1.cols);
     }
-    
-    for (let i = 0; i < crossover_idx; ++ i) {
+
+    for (let i = 0; i < crossover_idx; ++i) {
         mat3.data[floor(i / mat1.cols)][i % mat1.cols] = mat1.data[floor(i / mat1.cols)][i % mat1.cols]
     }
 
-    for (let i = 0; i < crossover_idx; ++ i) {
+    for (let i = 0; i < crossover_idx; ++i) {
         mat3.data[floor(i / mat1.cols)][i % mat1.cols] = mat2.data[floor(i / mat1.cols)][i % mat1.cols]
     }
 
@@ -113,7 +113,7 @@ function crossover(parents, pmutation, mutateFunc) {
         new_brain.weights_ho = matrixCrossover(parents[0].brain.weights_ho, parents[1].brain.weights_ho);
         new_brain.bias_h = matrixCrossover(parents[0].brain.bias_h, parents[1].brain.bias_h);
         new_brain.bias_o = matrixCrossover(parents[0].brain.bias_o, parents[1].brain.bias_o);
-    
+
         new_brain.mutate(mutateFunc);
         return new_brain;
     }
@@ -124,7 +124,7 @@ function calculateFitness() {
 
     let sum = 0;
     let bestIdx = 0;
-    for (let i = 0; i < savedBirds.length; ++ i) {
+    for (let i = 0; i < savedBirds.length; ++i) {
         sum += savedBirds[i].score;
         if (savedBirds[i].score > bestScore) {
             bestIdx = i;
@@ -139,7 +139,7 @@ function calculateFitness() {
     print(savedBirds[bestIdx].brain);
     print(bestBrain);
 
-    for (let i = 0; i < savedBirds.length; ++ i) {
+    for (let i = 0; i < savedBirds.length; ++i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
     }
 
