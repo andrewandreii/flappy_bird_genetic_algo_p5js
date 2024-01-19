@@ -12,14 +12,14 @@ var birds;
 var savedBirds;
 var pipes;
 
-var parallax = 0.8;
+var parallax = [0.7,0.8,0.9,1];
 
 var birdSprite;
 var pipeBodySprite;
 var pipePeakSprite;
-var bgImg;
+var bgImg = [];
 
-var bgX;
+var bgX = [0,0,0,0];
 
 const maxGap = 240;
 const minGap = 160;
@@ -39,13 +39,22 @@ function terrainDifficulty(gapSize) {
 }
 
 function preload() {
-    pipeBodySprite = getResource('gate.png');
-    pipePeakSprite = getResource('gate.png');
+    pipeBodySprite = getResource('pipe.png');
+    pipePeakSprite = getResource('pipe.png');
     Bird.default_sprite = getResource('bird_up.png');
     Bird.flip_sprite = getResource('bird_down.png');
     Pipe.spacing = maxGap;
-    bgImg = getResource('background.png');
+    makeBackSet();
     pipeFrequancy = 0;
+}
+
+function makeBackSet(){
+    let set = random(0,4.9);
+    set = floor(set)
+    bgImg[0] = getResource("back"+ set + "1.png");
+    bgImg[1] = getResource("back"+ set + "2.png");
+    bgImg[2] = getResource("back"+ set + "3.png");
+    bgImg[3] = getResource("back"+ set + "4.png");
 }
 
 function initBirds() {
@@ -101,14 +110,17 @@ function setup() {
 
 function parallax_background() {
     background(0);
-    image(bgImg, bgX, 0, bgImg.width, height);
-    bgX -= pipes[0].speed * parallax;
+    widthBack = 1200;
+    for(let i=0;i<4;i++){
+        image(bgImg[i], bgX[i], 0, widthBack , height);
+            bgX[i] -= pipes[0].speed * parallax[i];
 
-    if (bgX <= -bgImg.width + width) {
-        image(bgImg, bgX + bgImg.width, 0, bgImg.width, height);
-        if (bgX <= -bgImg.width) {
-            bgX = 0;
+        if (bgX[i] <= -widthBack  + width) {
+            image(bgImg[i], bgX[i] + widthBack, 0, widthBack , height);
+                if (bgX[i] <= -widthBack ) {
+                bgX[i] = 0;
         }
+    }
     }
 }
 
@@ -173,7 +185,8 @@ function draw() {
 }
 
 function reset(nextGen) {
-    bgX = 0;
+    bgX = [0,0,0,0];
+    makeBackSet();
 
     if (!nextGen) {
         bestScore = 0;

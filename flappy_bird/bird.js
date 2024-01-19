@@ -31,6 +31,8 @@ class Bird {
             this.sprite = sprite;
         } else {
             this.sprite = Bird.default_sprite;
+            this.sprite_default = Bird.default_sprite;
+            this.sprite_flip = Bird.flip_sprite;
         }
 
         if (brain) {
@@ -40,7 +42,26 @@ class Bird {
         }
 
         this.color = color;
+        //this.processImage(this.sprite_default,this.color);
+        //this.processImage(this.sprite_flip,this.color);
     }
+
+    processImage(img,color) {
+        img.loadPixels(); 
+      
+        for (let x = 0; x < img.width; x++) {
+          for (let y = 0; y < img.height; y++){
+            let pixelColor = img.get(x, y); 
+
+            if (pixelColor == [255,255,255,0]){
+              img.set(x,y,color);
+              print("PPP");
+            }
+          }
+        }
+      
+        img.updatePixels(); 
+      }
 
     show() {
         colorMode(HSB, 360, 100, 100);
@@ -56,7 +77,7 @@ class Bird {
             this.flip = 15;
         }
 
-        this.sprite = Bird.flip_sprite;
+        this.sprite = this.sprite_flip;
     }
 
     make_decision(pipes) {
@@ -77,7 +98,7 @@ class Bird {
 
         --this.flip;
         if (this.flip <= 0) {
-            this.sprite = Bird.default_sprite;
+            this.sprite = this.sprite_default;
         }
 
         this.velocity += this.gravity;
