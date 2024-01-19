@@ -15,6 +15,7 @@ var pipes;
 var parallax = 0.8;
 
 var birdSprite;
+var birdFlipSprite;
 var pipeBodySprite;
 var pipePeakSprite;
 var bgImg;
@@ -38,13 +39,19 @@ function terrainDifficulty(gapSize) {
     return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
 
+var noImages = true;
 function preload() {
-    pipeBodySprite = getResource('gate.png');
-    pipePeakSprite = getResource('gate.png');
-    Bird.default_sprite = getResource('bird_up.png');
-    Bird.flip_sprite = getResource('bird_down.png');
+    fetch(resourcesPath + "gate.png")
+        .then(() => { noImages = false; })
+        .catch(() => {});
+    
+    pipeBodySprite = getResource("gate.png");
+    pipePeakSprite = getResource("gate.png");
+    birdSprite = getResource("bird_up.png");
+    birdFlipSprite = getResource("bird_down.png");
+    bgImg = getResource("background.png");
+
     Pipe.spacing = maxGap;
-    bgImg = getResource('background.png');
     pipeFrequancy = 0;
 }
 
@@ -97,6 +104,8 @@ function setup() {
     initBirds();
 
     reset(false);
+
+    loop();
 }
 
 function parallax_background() {
@@ -114,7 +123,11 @@ function parallax_background() {
 
 const INFO_TEXT = ["Generation", "Best score", "Terrain difficulty", "Hardest terrain reached", "Population size"]
 function draw() {
-    parallax_background();
+    if (noImages) {
+        background(0);
+    } else {
+        parallax_background();
+    }
 
     if (birds.length == 0) {
         reset(true);

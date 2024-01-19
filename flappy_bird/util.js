@@ -1,6 +1,7 @@
-const resourcesPath = "../resources/"
+const resourcesPath = "resources/"
 function getResource(filename) {
-    return loadImage(resourcesPath + filename);
+    let img = loadImage(resourcesPath + filename, () => {}, () => { print("failed to load image"); });
+    return img;
 }
 
 function showInfo(labels, values, text_size, margin) {
