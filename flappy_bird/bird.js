@@ -51,9 +51,11 @@ class Bird {
     }
 
     up() {
-        this.velocity = -this.lift;
+        this.velocity = -Bird.lift;
+        if (this.flip <= 15) {
+            this.flip = 15;
+        }
         
-        this.flip = 15;
         this.sprite = Bird.flip_sprite;
     }
 
@@ -74,8 +76,9 @@ class Bird {
         ++ this.score;
 
         this.flip --;
-        if(this.flip <= 0)
+        if(this.flip <= 0) {
             this.sprite = Bird.default_sprite;
+        }
 
         this.velocity += this.gravity;
         this.y += this.velocity;
