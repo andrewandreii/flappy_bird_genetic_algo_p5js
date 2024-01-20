@@ -12,7 +12,7 @@ var birds;
 var savedBirds;
 var pipes;
 
-var parallax = [0.7,0.8,0.9,1];
+var parallax = [0.6,0.7,0.8,0.9];
 
 var birdSprite;
 var birdFlipSprite;
