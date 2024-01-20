@@ -47,8 +47,8 @@ function preload() {
     
     pipeBodySprite = getResource("pipe.png");
     pipePeakSprite = getResource("pipe.png");
-    birdSprite = getResource("bird_up.png");
-    birdFlipSprite = getResource("bird_down.png");
+    birdSprite = getResource("bird_down.png");
+    birdFlipSprite = getResource("bird_up.png");
     makeBackSet();
 
     Pipe.spacing = maxGap;
@@ -125,9 +125,9 @@ function parallax_background() {
             bgX[i] -= pipes[0].speed * parallax[i];
 
         if (bgX[i] <= -widthBack  + width) {
-            image(bgImg[i], bgX[i] + widthBack, 0, widthBack , height);
+            image(bgImg[i], bgX[i] + widthBack , 0, widthBack , height);
                 if (bgX[i] <= -widthBack ) {
-                bgX[i] = 0;
+                bgX[i] = - 3;
         }
     }
     }
