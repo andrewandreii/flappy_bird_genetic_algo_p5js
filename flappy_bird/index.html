@@ -19,7 +19,6 @@
             --blue7: #394b70;
             --fg: #c0caf5;
             --fg-dark: #a9b1d6;
-
         }
 
         html,
@@ -73,6 +72,8 @@
             margin-left: 10px;
             margin-right: 10px;
             background: var(--bg);
+            overflow-y: scroll;
+            padding: 10px;
         }
 
         button {
@@ -124,7 +125,38 @@
         </div>
     </div>
     <div id="docs">
-
+        <h1>Flappy Bird Genetic Algorithm</h1>
+        <br>
+        <h2>The differences from the original idea by Daniel Shiffman</h2>
+        1) The <b>mutation function</b>. In contrast with the original code, this one allows a bird to have two parents from a previous generation, mixing their genetic code up. This allows us to make broaden our <b>search space</b>.
+        <br>
+        2) This flappy bird algorithm also <b>preserves the best performing individual</b> of all time alive so that we don't lose its good genes. This is called <b>elitist selection</b>.
+        <br>
+        3) The <b>jump height</b> also differs by default (but there is a slider available to modify it). This might result in performance differences between the two algorithms.
+        <br>
+        4) You may also notice that the <b>terrain gets increasingly more difficult</b>, starting off with easy spacious pipes and getting more cramped as the algorithm performs better. This feature was added so that the birds can learn at a steady pace (instead of making it hard from the beginning and waiting a long time for it to pass the first 2 pipes).
+        <br>
+        5) The birds can now <b>die if they fly too low or too high</b>. I noticed that birds that aren't that fit make it to the next generation just by <i>being alive</i> because they don't die until the first pipe. This method hopefully reduces the bad genes in the gene pool.
+        <br>
+        <br>
+        <h3>How is the fitness of a bird calculated?</h3>
+        <br>
+        We use a `score` variable in the `Bird` class that represents how many frames a bird has lived. Each bird is assigned the percentage of their score in the whole population.
+        <br>
+        <br>
+        <h3>How do we pick the parents?</h3>
+        <br>
+        Each fitness represents the chances a bird has to be picked. We do it this way so that there is variety in the next generation (i.e. the not-so-good birds also get a chance to have a child).
+        <br>
+        <br>
+        <h3>How does the mutation function work?</h3>
+        <br>
+        Each weight and bias of the neural network of a bird is tweaked by a small random amount (or has a chance of remaining the same).
+        <br>
+        <br>
+        <h3>What do the colors of the birds represent?</h3>
+        <br>
+        At the beginning of the simulation each of the birds is assigned a color. The next generations, the colors of two parents get mixed to produce the color of their child. By the end (when the birds are basically as good as they can get at the game) there will probably be one color that remains standing since siblings are likely to be parents.
     </div>
 </body>
 

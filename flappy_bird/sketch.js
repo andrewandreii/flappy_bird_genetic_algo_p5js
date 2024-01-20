@@ -15,6 +15,7 @@ var pipes;
 var parallax = [0.7,0.8,0.9,1];
 
 var birdSprite;
+var birdFlipSprite;
 var pipeBodySprite;
 var pipePeakSprite;
 var bgImg = [];
@@ -23,10 +24,10 @@ var bgX = [0,0,0,0];
 
 const maxGap = 240;
 const minGap = 160;
-var gapThightteningRate = 0.03;
+var gapThightteningRate = 0.02;
 const MIN_PIPE_PERIOD = 90;
 const MAX_PIPE_PERIOD = 150; // every 150 frames
-var periodShorteningRate = 0.03;
+var periodShorteningRate = 0.02;
 var pipePeriod = MAX_PIPE_PERIOD;
 var minGapReached = maxGap;
 var pipePeriodCheck = 0;
@@ -38,13 +39,20 @@ function terrainDifficulty(gapSize) {
     return 1 - (gapSize - minGap) / (maxGap - minGap);
 }
 
+var noImages = true;
 function preload() {
-    pipeBodySprite = getResource('pipe.png');
-    pipePeakSprite = getResource('pipe.png');
-    Bird.default_sprite = getResource('bird_up.png');
-    Bird.flip_sprite = getResource('bird_down.png');
-    Pipe.spacing = maxGap;
+    fetch(resourcesPath + "gate.png")
+        .then(() => { noImages = false; })
+        .catch(() => {});
+    
+    pipeBodySprite = getResource("gate_old.png");
+    pipePeakSprite = getResource("gate_old.png");
+    birdSprite = getResource("bird_up.png");
+    birdFlipSprite = getResource("bird_down.png");
     makeBackSet();
+
+    Pipe.spacing = maxGap;
+    bgImg = getResource('background.png');
     pipeFrequancy = 0;
 }
 
@@ -68,14 +76,14 @@ function initBirds() {
 
         if (hueCounter > 5) {
             hueCounter = 0;
-            birds[i] = new Bird(null, [color, 100, 100]);
+            birds[i] = new Bird(null, HSVtoRGB(color / 360, 1, 1));
         }
         else {
             if (hueCounter > 2.5) {
-                birds[i] = new Bird(null, [color, 100 - 4 * hueCounter, 100]);
+                birds[i] = new Bird(null, HSVtoRGB(color / 360, 1 - 4 * hueCounter / 100, 1));
             }
             else {
-                birds[i] = new Bird(null, [color, 100, 100 - 4 * hueCounter]);
+                birds[i] = new Bird(null, HSVtoRGB(color / 360, 1, 1 - 4 * hueCounter / 100));
             }
         }
     }
@@ -106,6 +114,8 @@ function setup() {
     initBirds();
 
     reset(false);
+
+    loop();
 }
 
 function parallax_background() {
@@ -126,7 +136,11 @@ function parallax_background() {
 
 const INFO_TEXT = ["Generation", "Best score", "Terrain difficulty", "Hardest terrain reached", "Population size"]
 function draw() {
-    parallax_background();
+    if (noImages) {
+        background(0);
+    } else {
+        parallax_background();
+    }
 
     if (birds.length == 0) {
         reset(true);

@@ -26,23 +26,9 @@ function nextGeneration() {
     birds = [];
     bestNumOfKids = 0;
     for (let i = 0; i < populationSize.value - 1; ++i) {
-        // let parent = pickOne();
-
-        // if (parent.color == bestScoreColor) {
-        //     ++ bestNumOfKids;
-        // }
-
-        // let child = new Bird(parent.brain, parent.color.map(function (x) { return mutateBy(x, 0.1 * 255); }));
-        // child.brain.mutate(function (x) { return mutateBy(x, (avg_fitness - parent.fitness) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); });
-
         let parents = [pickOne(), pickOne()];
 
-        // while (parents[0] == parents[1]) {
-        //     parents[1] = pickOne();
-        // }
-
         let child = new Bird(crossover(parents, 0.3, function (x) { return mutateBy(x, (avg_fitness - (parents[0].fitness + parents[1].fitness) / 2) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); }), meanColor(parents[0].color, parents[1].color));
-        print(child.x, child.y);
 
         birds.push(child);
     }
@@ -88,9 +74,6 @@ function matrixCrossover(mat1, mat2, crossover_idx) {
 
 function crossover(parents, pmutation, mutateFunc) {
     if (random(1) < pmutation || parents[0] == parents[1]) {
-        if (parents[0] == parents[1]) {
-            print("wah");
-        }
         let brain = parents[floor(random(parents.length - 1))].brain;
         brain.mutate(mutateFunc);
     } else {
@@ -98,16 +81,6 @@ function crossover(parents, pmutation, mutateFunc) {
         let n = brain.input_nodes;
         let m = brain.hidden_nodes;
         let new_brain = new NeuralNetwork(n, m, brain.output_nodes);
-
-        // let crossover_i = floor(random(n * m));
-
-        // for (let i = 0; i < crossover_i; ++ i) {
-        //     new_brain.weights_ih.data[floor(i / m)][i % m] = parents[0].brain.weights_ih.data[floor(i / m)][i % m];
-        // }
-
-        // for (let i = crossover_i; i < parents.length; ++ i) {
-        //     new_brain.weights_ih.data[floor(i / m)][i % m] = parents[1].brain.weights_ih.data[floor(i / m)][i % m];
-        // }
 
         new_brain.weights_ih = matrixCrossover(parents[0].brain.weights_ih, parents[1].brain.weights_ih);
         new_brain.weights_ho = matrixCrossover(parents[0].brain.weights_ho, parents[1].brain.weights_ho);
@@ -120,8 +93,6 @@ function crossover(parents, pmutation, mutateFunc) {
 }
 
 function calculateFitness() {
-    // print(savedBirds);
-
     let sum = 0;
     let bestIdx = 0;
     for (let i = 0; i < savedBirds.length; ++i) {
@@ -135,15 +106,10 @@ function calculateFitness() {
 
     bestEachGen.push(savedBirds[bestIdx]);
     bestBrain = savedBirds[bestIdx].brain.copy();
-    print(bestIdx);
-    print(savedBirds[bestIdx].brain);
-    print(bestBrain);
 
     for (let i = 0; i < savedBirds.length; ++i) {
         savedBirds[i].fitness = savedBirds[i].score / sum;
     }
-
-    // print(savedBirds.map(function (x) { return x.fitness; }));
 
     return sum;
 }

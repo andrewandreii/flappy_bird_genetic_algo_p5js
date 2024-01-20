@@ -11,6 +11,14 @@ class Pipe {
         this.x = width;
         this.w = 80;
         this.speed = 3;
+
+        if (noImages) {
+            this.show = () => {
+                fill(115, 98, 65);
+                rect(this.x, 0, this.w, this.top);
+                rect(this.x, this.bottom, this.w, width - this.bottom);
+            };
+        }
     }
 
     hits(bird) {
