@@ -33,7 +33,26 @@ class Bird {
         }
 
         this.color = color;
+        //this.processImage(this.sprite_default,this.color);
+        //this.processImage(this.sprite_flip,this.color);
     }
+
+    processImage(img,color) {
+        img.loadPixels(); 
+      
+        for (let x = 0; x < img.width; x++) {
+          for (let y = 0; y < img.height; y++){
+            let pixelColor = img.get(x, y); 
+
+            if (pixelColor == [255,255,255,0]){
+              img.set(x,y,color);
+              print("PPP");
+            }
+          }
+        }
+      
+        img.updatePixels(); 
+      }
 
     show() {
         // colorMode(HSB, 360, 100, 100);
