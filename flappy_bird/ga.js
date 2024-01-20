@@ -28,7 +28,14 @@ function nextGeneration() {
     for (let i = 0; i < populationSize.value - 1; ++i) {
         let parents = [pickOne(), pickOne()];
 
-        let child = new Bird(crossover(parents, 0.3, function (x) { return mutateBy(x, (avg_fitness - (parents[0].fitness + parents[1].fitness) / 2) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); }), meanColor(parents[0].color, parents[1].color));
+        let newColor;
+        if (parents[0].score > parents[1].score) {
+            newColor = parents[0].color.copy();
+        } else {
+            newColor = parents[1].color.copy();
+        }
+
+        let child = new Bird(crossover(parents, 0.3, newColor);
 
         birds.push(child);
     }
