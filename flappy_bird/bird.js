@@ -36,7 +36,7 @@ class Bird {
     }
 
     show() {
-        colorMode(HSB, 360, 100, 100);
+        // colorMode(HSB, 360, 100, 100);
         noStroke();
         fill(floor(this.color[0]), floor(this.color[1]), floor(this.color[2]));
         ellipse(this.x, this.y, max(this.width, this.height) + 12);

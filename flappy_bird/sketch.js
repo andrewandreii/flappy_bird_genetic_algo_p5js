@@ -24,10 +24,10 @@ var bgX;
 
 const maxGap = 240;
 const minGap = 160;
-var gapThightteningRate = 0.03;
+var gapThightteningRate = 0.02;
 const MIN_PIPE_PERIOD = 90;
 const MAX_PIPE_PERIOD = 150; // every 150 frames
-var periodShorteningRate = 0.03;
+var periodShorteningRate = 0.02;
 var pipePeriod = MAX_PIPE_PERIOD;
 var minGapReached = maxGap;
 var pipePeriodCheck = 0;
@@ -66,14 +66,14 @@ function initBirds() {
 
         if (hueCounter > 5) {
             hueCounter = 0;
-            birds[i] = new Bird(null, [color, 100, 100]);
+            birds[i] = new Bird(null, HSVtoRGB(color / 360, 1, 1));
         }
         else {
             if (hueCounter > 2.5) {
-                birds[i] = new Bird(null, [color, 100 - 4 * hueCounter, 100]);
+                birds[i] = new Bird(null, HSVtoRGB(color / 360, 1 - 4 * hueCounter / 100, 1));
             }
             else {
-                birds[i] = new Bird(null, [color, 100, 100 - 4 * hueCounter]);
+                birds[i] = new Bird(null, HSVtoRGB(color / 360, 1, 1 - 4 * hueCounter / 100));
             }
         }
     }
