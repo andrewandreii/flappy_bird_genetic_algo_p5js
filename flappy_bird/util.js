@@ -1,4 +1,4 @@
-const resourcesPath = "resources/"
+const resourcesPath = "https://raw.githubusercontent.com/andrewandreii/flappy_bird_genetic_algo_p5js/main/flappy_bird/resources/"
 function getResource(filename) {
     let img = loadImage(resourcesPath + filename, () => {}, () => { print("failed to load image"); });
     return img;
