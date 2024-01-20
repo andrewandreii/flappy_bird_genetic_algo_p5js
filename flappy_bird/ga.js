@@ -30,12 +30,12 @@ function nextGeneration() {
 
         let newColor;
         if (parents[0].score > parents[1].score) {
-            newColor = parents[0].color.copy();
+            newColor = parents[0].color;
         } else {
-            newColor = parents[1].color.copy();
+            newColor = parents[1].color;
         }
 
-        let child = new Bird(crossover(parents, 0.3, newColor);
+        let child = new Bird(crossover(parents, 0.3, function (x) { return mutateBy(x, (avg_fitness - (parents[0].fitness + parents[1].fitness) / 2) * AVERAGE_MUTATION_AMOUNT + AVERAGE_MUTATION_AMOUNT); }), newColor);
 
         birds.push(child);
     }
