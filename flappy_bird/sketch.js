@@ -45,8 +45,8 @@ function preload() {
         .then(() => { noImages = false; })
         .catch(() => {});
     
-    pipeBodySprite = getResource("gate_old.png");
-    pipePeakSprite = getResource("gate_old.png");
+    pipeBodySprite = getResource("pipe.png");
+    pipePeakSprite = getResource("pipe.png");
     birdSprite = getResource("bird_up.png");
     birdFlipSprite = getResource("bird_down.png");
     makeBackSet();
