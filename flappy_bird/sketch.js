@@ -52,7 +52,6 @@ function preload() {
     makeBackSet();
 
     Pipe.spacing = maxGap;
-    bgImg = getResource('background.png');
     pipeFrequancy = 0;
 }
 
